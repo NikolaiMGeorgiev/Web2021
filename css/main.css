@@ -3,6 +3,26 @@
     font-family: 'Trebuchet MS', sans-serif;
 }
 
+html, body, main {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+body {
+    background: rgb(223, 242, 242);
+    /*background: rgb(206, 224, 224);*/
+}
+
+main {
+    height: 100%;
+    margin-top: 64px;
+}
+
+h2 {
+    font-size: 1.2rem;
+}
+
 #main_header {
     width: 100%;
     height: 64px;
@@ -51,6 +71,35 @@
 
 .button-icon {
     cursor: pointer;
+}
+
+.banner-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 64px;
+    overflow-x: hidden;
+    width: 100%;
+    height: 280px;
+}
+
+.banner {
+    object-fit: none;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 2px;
+    background: transparent;
+}
+
+div {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(65, 65, 65);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(65, 65, 65);
+    border-radius: 40px;
 }
 
 @media (max-width: 380px) {
