@@ -1,0 +1,60 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+#main_header {
+    width: 100%;
+    height: 64px;
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    justify-content: space-between;
+    align-items: center;
+    background: rgb(0, 53, 102);
+    border-bottom: 6px solid rgb(36, 130, 50);
+    z-index: 100;
+}
+
+#icon_header_container {
+    margin-left: 20px;
+}
+
+#profile_header_container {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+
+}
+
+#profile_header_container .no-style-a {
+    margin-right: 10px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#profile_header_container .no-style-a {
+    margin-right: 10px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.no-style-a {
+    text-decoration: none;
+    color: rgb(245, 245, 245);
+}
+
+.no-style-a:hover {
+    color: rgb(156, 236, 91);
+}
+
+.button-icon {
+    cursor: pointer;
+}
+
+@media (max-width: 380px) {
+    #sign_in, #register {
+        display: none;
+    }
+}
