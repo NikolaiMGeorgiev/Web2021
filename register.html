@@ -2,7 +2,7 @@
 <html lang="bg">
     <head>
         <meta charset="UTF-8">
-        <title>Вход</title>
+        <title>Регистрация</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/login.css">
@@ -22,22 +22,26 @@
             </div>
         </header>
         <main>
-            <div id="login_form_container" class="form-container">
-                <form action="" method="post" id="login_form">
-                    <header id="form_title">Вход</header>
-                    <div class="form-item">
-                        <label for="email" class="lbl">Имейл:</label>
-                        <input type="email" id="email" name="email" placeholder="Въведи имейл тук">
+            <div id="register_type_container" class="form-container">
+                <header>
+                    <h1>Регистрация</h1>
+                </header>
+                <div id="profile-types-container">
+                    <div class="profile-type">
+                        <div>
+                            <img src="img/icons/student.png" alt="">
+                        </div>
+                        <h2>Регистрация като студент/ученик</h2>
+                        <button id="register-student-btn" class="gradient-btn">Регистрация</button>
                     </div>
-                    <div class="form-item">
-                        <label for="password" class="lbl">Парола:</label>
-                        <input type="password" id="password" name="password" placeholder="Въведи парола тук">
+                    <div class="profile-type">
+                        <div>
+                            <img src="img/icons/teacher.png" alt="">
+                        </div>
+                        <h2>Регистрация като преподавател</h2>
+                        <button id="register-techer-btn" class="gradient-btn">Регистрация</button>
                     </div>
-                    <div class="form-item btn-container">
-                        <a href="register.html">Нямаш профил? Натисни тук, за да се регистрираш.</a>
-                        <button id="login-btn" class="btn_submit gradient-btn" type="button">Вход</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </main>
     </body>

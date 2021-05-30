@@ -7,7 +7,7 @@
         function __construct() {
             
             $host = "localhost";
-            $dbname = "notes";
+            $dbname = "meetup";
             $username = "root";
             $password = "";
 

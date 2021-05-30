@@ -1,6 +1,8 @@
 * {
     box-sizing: border-box;
     font-family: 'Trebuchet MS', sans-serif;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(65, 65, 65) transparent;
 }
 
 html, body, main {
@@ -19,8 +21,16 @@ main {
     margin-top: 64px;
 }
 
+h1 {
+    font-size: 1.5rem;
+}
+
 h2 {
     font-size: 1.2rem;
+}
+
+button {
+    cursor: pointer;
 }
 
 #main_header {
@@ -69,6 +79,15 @@ h2 {
     color: rgb(156, 236, 91);
 }
 
+.no-style-a-dark {
+    text-decoration: none;
+    color: rgb(0, 107, 210);
+}
+
+.no-style-a-dark:hover {
+    color: rgb(123, 204, 57);
+}
+
 .button-icon {
     cursor: pointer;
 }
@@ -86,20 +105,50 @@ h2 {
     object-fit: none;
 }
 
+.centered-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.gradient-btn {
+    font-weight: bold;
+    box-sizing: border-box;
+    color: white;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    background: rgb(0,53,102);
+    background: linear-gradient(45deg, rgba(0,53,102,1) 20%, rgba(65,134,198,1) 50%, rgba(0,53,102,1) 80%);
+    border: 2px solid rgb(43, 59, 74);
+    border-radius: 3px;
+}
+
+.gradient-btn:hover {
+    background: rgb(20,79,134);
+    background: linear-gradient(45deg, rgba(20,79,134,1) 10%, rgb(97, 179, 255) 50%, rgba(20,79,134,1) 90%);
+    border-color: rgb(33, 47, 59);
+}
+
 ::-webkit-scrollbar {
     width: 5px;
     height: 2px;
     background: transparent;
 }
 
-div {
-    scrollbar-width: thin;
-    scrollbar-color: rgb(65, 65, 65);
-}
-
 ::-webkit-scrollbar-thumb {
     background: rgb(65, 65, 65);
     border-radius: 40px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 @media (max-width: 380px) {

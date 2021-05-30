@@ -1,6 +1,7 @@
 <?php
     require_once("../src/AppBootStrap.php");
-    
+    AppBootStrap::init();
+
     switch($_SERVER["REQUEST_METHOD"]) {
         case "GET": {
 

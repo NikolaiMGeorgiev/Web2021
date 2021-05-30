@@ -8,7 +8,7 @@
 
             $hashed_password = password_hash($userInfo["password"], PASSWORD_DEFAULT);
 
-            $stmt = $connection->prepare("INSERT INTO users (name,password,email,userTypeId) VALUES (:name, :password, :email, :userTypeId");
+            $stmt = $connection->prepare("INSERT INTO users (name,password,email,userTypeId) VALUES (:name, :password, :email, :userTypeId)");
             $success = $stmt->execute([
                 "name" => $userInfo["name"],
                 "password" => $hashed_password,
@@ -32,7 +32,7 @@
             }
 
             if ($stmt->fetch(PDO::FETCH_ASSOC)["code"] == "STUDENT") {
-                $stmt = $connection->prepare("INSERT INTO studentDetails (fn,year,degree,userId) VALUES (:fn,:year,:degree,:userId)");
+                $stmt = $connection->prepare("INSERT INTO students_details (fn,year,degree,userId) VALUES (:fn,:year,:degree,:userId)");
                 $success = $stmt->execute([
                     "fn" => $userInfo["fn"],
                     "year" => $userInfo["fn"],
