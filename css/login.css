@@ -7,7 +7,6 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 32px;
     background: rgb(21,119,122);
     background: linear-gradient(0deg, rgba(21,119,122,1) 0%, rgba(48,153,95,1) 30%, rgba(109,230,152,1) 75%);
 }

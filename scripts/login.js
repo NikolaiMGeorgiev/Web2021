@@ -16,17 +16,21 @@ window.onload = function () {
     }
 
     if (document.getElementById("student-btn")) {
-        document.getElementById("student-btn").addEventListener("click", postForm);
+        document.getElementById("student-btn").addEventListener("click", function () {
+            postForm(1);
+        });
     }
 
     if (document.getElementById("teacher-btn")) {
-        document.getElementById("teacher-btn").addEventListener("click", postForm);
+        document.getElementById("teacher-btn").addEventListener("click", function () {
+            postForm(2);
+        });
     }
 };
 
-function postForm () {
+function postForm (userTypeId) {
     if (validateInput()) {
-        const data = getFormDataJSON();
+        const data = getFormDataJSON(userTypeId);
         const url =  "http://localhost/Web2021/endpoints/user.php";
         const response = fetch(url, {
             method: 'POST',
@@ -35,7 +39,7 @@ function postForm () {
             },
             body: data,
         });
-        console.log(response);
+
         if (!response && !document.getElementById("error_validation")) {
             let inputs = document.getElementsByTagName("input");
             let lastInput = inputs[inputs.length - 1];
@@ -43,9 +47,10 @@ function postForm () {
             error.classList.add("error_field");
             error.setAttribute("id", "error_validation");
             error.textContent = "Невалидни входни данни";
+            
             lastInput.parentNode.insertBefore(error, lastInput.nextSibling);
         } else if (window.location.href.substring("register")) {
-            //window.location.href = 'register_success.html';
+            window.location.href = 'register_success.html';
         }
     }
 }
@@ -53,6 +58,7 @@ function postForm () {
 function validateInput () {
     let inputs = document.getElementsByTagName("input");
     let isValid = true;
+
     for (const input of inputs) {
         if (input.value == "" && !document.getElementById("error_" + input.id)) {
             let error = document.createElement("small");
@@ -65,27 +71,28 @@ function validateInput () {
             document.getElementById("error_" + input.id).remove();
         }
     }
+
     return isValid;
 }
 
-function getFormDataJSON () {
+function getFormDataJSON (userTypeId) {
     let inputs = document.getElementsByTagName("input");
     let name = "";
     data = {};
+    data["userTypeId"] = userTypeId;
 
     for (const input of inputs) {
         if (input.name == "first_name") {
             name += input.value;
             continue;
         } else if (input.name == "last_name") {
-            name += input.value;
+            name += " " + input.value;
             data["name"] = name;
             continue;
         }
+
         data[input.name] = input.value;
     }
-
-    data["userTypeId"] = "1";
 
     return JSON.stringify(data);
 }

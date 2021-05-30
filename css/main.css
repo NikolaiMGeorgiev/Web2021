@@ -18,7 +18,7 @@ body {
 
 main {
     height: 100%;
-    margin-top: 64px;
+    padding-top: 64px;
 }
 
 h1 {
@@ -95,7 +95,6 @@ button {
 .banner-container {
     display: flex;
     justify-content: center;
-    margin-top: 64px;
     overflow-x: hidden;
     width: 100%;
     height: 280px;
@@ -108,7 +107,6 @@ button {
 .centered-column {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
