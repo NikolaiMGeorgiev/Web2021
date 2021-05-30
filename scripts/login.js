@@ -49,7 +49,7 @@ function postForm (userTypeId) {
             error.textContent = "Невалидни входни данни";
             
             lastInput.parentNode.insertBefore(error, lastInput.nextSibling);
-        } else if (window.location.href.substring("register")) {
+        } else if (window.location.href.indexOf("register") != -1) {
             window.location.href = 'register_success.html';
         }
     }
@@ -60,19 +60,40 @@ function validateInput () {
     let isValid = true;
 
     for (const input of inputs) {
-        if (input.value == "" && !document.getElementById("error_" + input.id)) {
-            let error = document.createElement("small");
-            error.classList.add("error_field");
-            error.setAttribute("id", "error_" + input.id);
-            error.textContent = "Полето е задължително";
-            input.parentNode.insertBefore(error, input.nextSibling);
+        if (input.value == "") {
+            if (!document.getElementById("error_" + input.id)) {
+                let error = document.createElement("small");
+                error.classList.add("error_field");
+                error.setAttribute("id", "error_" + input.id);
+                error.textContent = "Полето е задължително";
+                input.parentNode.insertBefore(error, input.nextSibling);
+            }
+
             isValid = false;
         } else if (input.value != "" && document.getElementById("error_" + input.id)) {
+            if (input.name == "email" && !isValidEmail(input.value)) {
+                document.getElementById("error_" + input.id).textContent = "Грешен имейл";
+                isValid = false;
+                continue;
+            }
+
             document.getElementById("error_" + input.id).remove();
+        } else if (input.name == "email" && !isValidEmail(input.value)) {
+            let error = document.createElement("small");
+            error.classList.add("error_field");
+            error.setAttribute("id", "error_email");
+            error.textContent = "Грешен имейл";
+            input.parentNode.insertBefore(error, input.nextSibling);
+            isValid = false;
         }
     }
 
     return isValid;
+}
+
+function isValidEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
 }
 
 function getFormDataJSON (userTypeId) {

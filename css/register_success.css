@@ -1,14 +1,19 @@
 main {
     display: flex;
     justify-content: center;
+    background: white;
 }
 
-.centered-column {
+#success_container {
     width: 75%;
     height: 100%;
-    background: white;
+    padding-top: 40px;
 }
 
 .success-text-container {
     width: 100%;
+}
+
+.success-text-container a {
+    text-align: center;
 }
