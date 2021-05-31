@@ -78,10 +78,10 @@ CREATE TABLE `schedule` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `studentsdetails`
+-- Table structure for table `students_details`
 --
 
-CREATE TABLE `studentsdetails` (
+CREATE TABLE `students_details` (
   `id` int(10) NOT NULL,
   `fn` int(10) NOT NULL,
   `degree` varchar(200) NOT NULL,
@@ -159,9 +159,9 @@ ALTER TABLE `schedule`
   ADD KEY `roomId` (`roomId`);
 
 --
--- Indexes for table `studentsdetails`
+-- Indexes for table `students_details`
 --
-ALTER TABLE `studentsdetails`
+ALTER TABLE `students_details`
   ADD PRIMARY KEY (`id`),
   ADD KEY `userId` (`userId`);
 
@@ -207,9 +207,9 @@ ALTER TABLE `schedule`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `studentsdetails`
+-- AUTO_INCREMENT for table `students_details`
 --
-ALTER TABLE `studentsdetails`
+ALTER TABLE `students_details`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
@@ -256,10 +256,10 @@ ALTER TABLE `schedule`
   ADD CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`roomId`) REFERENCES `rooms` (`id`);
 
 --
--- Constraints for table `studentsdetails`
+-- Constraints for table `students_details`
 --
-ALTER TABLE `studentsdetails`
-  ADD CONSTRAINT `studentsdetails_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
+ALTER TABLE `students_details`
+  ADD CONSTRAINT `students_details_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `users`

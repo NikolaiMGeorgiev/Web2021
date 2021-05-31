@@ -1,13 +1,23 @@
 <?php
     require_once("../src/AppBootStrap.php");
+
     AppBootStrap::init();
 
     switch($_SERVER["REQUEST_METHOD"]) {
-        case "GET": {
+        case "GET": { // get user by id
+            SessionRequestHandler::requireLoggedUser();
+
+            if (!isset($_GET["id"]) || !$_GET["id"]) {
+                throw new BadRequestException("The user id parameter should be provided");
+            } else {
+                $returnData = UserRequestHandler::getUserById($_GET["id"]);
+            }
+
+            echo json_encode($returnData);
 
             break;
         }
-        case "POST": {
+        case "POST": { // register
             $newPersonData = json_decode(file_get_contents("php://input"), true);
 
             $userId = UserRequestHandler::createUser($newPersonData);
