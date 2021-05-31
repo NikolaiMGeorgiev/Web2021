@@ -1,7 +1,7 @@
 <?php
     require_once("User.php");
 
-    class Students extends User {
+    class Student extends User {
         private $fn;
 
         private $year;
