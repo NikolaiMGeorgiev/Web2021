@@ -1,3 +1,9 @@
+main {
+    width: auto;
+    margin-left: 240px;
+    padding: 104px 40px 40px 40px;
+}
+
 nav {
     width: 240px;
     height: 100%;
@@ -6,8 +12,8 @@ nav {
     flex-direction: column;
     margin-top: 69px;
     padding: 32px 10px 10px 0;
-    background: rgb(90, 158, 161);
-    border-left: 10px solid rgb(21,119,122);
+    background: rgb(72, 112, 151);
+    border-left: 10px solid rgb(0, 87, 170);
 }
 
 .nav-element {
@@ -16,14 +22,14 @@ nav {
     align-items: center;
     margin: 5px 0;
     padding: 5px;
-    background: rgb(145, 193, 194);
+    background: rgb(157, 215, 248);
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
 
 .nav-element:hover {
     cursor: pointer;
-    background: rgb(156, 236, 91);
+    background: rgb(53, 159, 245);
 }
 
 .nav-element img {
@@ -36,5 +42,75 @@ nav {
     position: fixed;
     top: 64px;
     left: 0;
-    background: rgb(11, 68, 70);
+    background: rgb(0, 18, 51);
+}
+
+#events-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: rgb(206, 224, 224);
+    border-radius: 20px;
+}
+
+#page_header {
+    margin: 20px;
+    padding-left: 10px;
+    background: #001233;
+    color: rgb(240 240 240);
+    border-radius: 8px;
+}
+
+.events {
+    display: flex;
+    flex-direction: column;
+}
+
+.event {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 20px 40px 20px;
+    background: rgb(183, 216, 211);
+    border: 2px solid rgb(138, 181, 181);
+    border-left: 10px solid rgb(0, 18, 51);
+    border-radius: 5px;
+}
+.event:hover {
+    cursor: pointer;
+    /*border-left: 10px solid rgb(156, 236, 91);*/
+    /*background: rgb(196, 231, 226);*/
+    background: rgb(224, 248, 244);
+}
+
+.event header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0 10px;
+    color: rgb(0, 18, 51);
+    background: rgb(21,119,122);
+    background: linear-gradient(90deg, rgba(21,119,122,1) 0%, rgba(48,153,95,1) 50%, rgba(109,230,152,1) 100%); 
+}
+
+.event-info-container {
+    padding: 0 20px 0 40px;
+}
+
+.one-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 5fr;
+}
+
+.place {
+    width: 120px;
+}
+
+.heading-label {
+    display: block;
+    color: rgb(15, 127, 126);
+}
+
+.lighter {
+    font-weight: lighter;
+    color: rgb(0, 53, 102);
 }

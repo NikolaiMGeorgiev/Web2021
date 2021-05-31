@@ -5,7 +5,7 @@
     scrollbar-color: rgb(65, 65, 65) transparent;
 }
 
-html, body, main {
+body, main {
     height: 100%;
     width: 100%;
     margin: 0;

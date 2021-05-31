@@ -1,6 +1,8 @@
 window.onload = function () {
     if (document.getElementById("login-btn")) {
-        document.getElementById("login-btn").addEventListener("click", postForm);
+        document.getElementById("login-btn").addEventListener("click",function () {
+            postForm('login');
+        });
     }
 
     if (document.getElementById("register-techer-btn")) {
@@ -17,22 +19,22 @@ window.onload = function () {
 
     if (document.getElementById("student-btn")) {
         document.getElementById("student-btn").addEventListener("click", function () {
-            postForm(1);
+            postForm('register', 1);
         });
     }
 
     if (document.getElementById("teacher-btn")) {
         document.getElementById("teacher-btn").addEventListener("click", function () {
-            postForm(2);
+            postForm('register', 2);
         });
     }
 };
 
-async function postForm (userTypeId) {
+async function postForm (formType, userTypeId = 0) {
     if (validateInput()) {
-        const data = getFormDataJSON(userTypeId);
-        //const url = "http://localhost/Web2021/endpoints/user.php";
-        const url = "http://localhost/Web2021/endpoints/session.php";
+        const data = userTypeId ? getFormDataJSON(userTypeId) : '';
+        const url = formType === "register" ? "http://localhost/Web2021/endpoints/user.php" :
+            "http://localhost/Web2021/endpoints/session.php";
         var response;
         const responseJSON = await fetch(url, {
             method: 'POST',
@@ -41,9 +43,9 @@ async function postForm (userTypeId) {
             },
             body: data,
         }).then(data => data.json());
-        response = responseJSON['success'];
+        response = formType === "register" ? responseJSON['userId'] : responseJSON['success'];
 
-
+console.log(response);
         if (!response && !document.getElementById("error_validation")) {
             let inputs = document.getElementsByTagName("input");
             let lastInput = inputs[inputs.length - 1];
@@ -53,10 +55,10 @@ async function postForm (userTypeId) {
             error.textContent = "Невалидни входни данни";
             
             lastInput.parentNode.insertBefore(error, lastInput.nextSibling);
-        } else if (window.location.href.indexOf("register") != -1) {
+        } else if (formType === 'register') {
             window.location.href = 'register_success.html';
-        } else if (window.location.href.indexOf("login") != -1) {
-            window.location.href = 'index.html';
+        } else if (formType === 'login') {
+            window.location.href = 'panel.html';
         }
     }
 }
