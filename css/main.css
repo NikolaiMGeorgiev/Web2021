@@ -12,8 +12,10 @@ html, body, main {
 }
 
 body {
-    background: rgb(223, 242, 242);
+    /*background: rgb(223, 242, 242);*/
     /*background: rgb(206, 224, 224);*/
+    /*background: rgb(145, 193, 194);*/
+    background: rgb(185, 216, 219);
 }
 
 main {
@@ -43,7 +45,6 @@ button {
     justify-content: space-between;
     align-items: center;
     background: rgb(0, 53, 102);
-    border-bottom: 6px solid rgb(36, 130, 50);
     z-index: 100;
 }
 

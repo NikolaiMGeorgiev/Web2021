@@ -28,17 +28,21 @@ window.onload = function () {
     }
 };
 
-function postForm (userTypeId) {
+async function postForm (userTypeId) {
     if (validateInput()) {
         const data = getFormDataJSON(userTypeId);
-        const url =  "http://localhost/Web2021/endpoints/user.php";
-        const response = fetch(url, {
+        //const url = "http://localhost/Web2021/endpoints/user.php";
+        const url = "http://localhost/Web2021/endpoints/session.php";
+        var response;
+        const responseJSON = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: data,
-        });
+        }).then(data => data.json());
+        response = responseJSON['success'];
+
 
         if (!response && !document.getElementById("error_validation")) {
             let inputs = document.getElementsByTagName("input");
@@ -51,6 +55,8 @@ function postForm (userTypeId) {
             lastInput.parentNode.insertBefore(error, lastInput.nextSibling);
         } else if (window.location.href.indexOf("register") != -1) {
             window.location.href = 'register_success.html';
+        } else if (window.location.href.indexOf("login") != -1) {
+            window.location.href = 'index.html';
         }
     }
 }

@@ -10,9 +10,9 @@
             
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM users WHERE name=:email");
+            $stmt = $connection->prepare("SELECT * FROM users WHERE email=:email");
             $stmt->execute([
-                "name" => $loginData["email"]
+                "email" => $loginData["email"]
             ]);
             
             $user = $stmt->fetch();

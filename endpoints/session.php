@@ -17,11 +17,12 @@
             $logged = SessionRequestHandler::login($loginData);
             
             if ($logged) {
+                session_start();
+                
                 $_SESSION["logged"] = true;
-            } 
+            }
             
             echo json_encode(["success" => $logged]);
-
             break;
         }
         case "PUT" : {
