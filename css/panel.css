@@ -54,6 +54,8 @@ nav {
 }
 
 #page_header {
+    display: flex;
+    justify-content: space-between;
     margin: 20px;
     padding-left: 10px;
     background: #001233;
@@ -101,6 +103,11 @@ nav {
     grid-template-columns: 1fr 2fr 5fr;
 }
 
+.one-row-even {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
 .place {
     width: 120px;
 }
@@ -113,4 +120,15 @@ nav {
 .lighter {
     font-weight: lighter;
     color: rgb(0, 53, 102);
+}
+
+#nav_new_room {
+    background: rgb(21,119,122);
+    background: linear-gradient(90deg, rgba(21,119,122,1) 0%, rgba(48,153,95,1) 50%, rgba(109,230,152,1) 100%); 
+}
+
+#nav_new_room:hover {
+    background: rgb(18, 170, 175);
+    background: linear-gradient(90deg, rgb(18, 170, 175) 0%, rgb(66, 199, 126) 50%, rgb(157, 255, 191) 100%); 
+
 }
