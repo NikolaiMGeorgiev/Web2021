@@ -2,15 +2,13 @@
 
     require_once("../src/AppBootStrap.php");
 
-    AppBootStrap::init();
+    AppBootStrap::init(true);
 
     switch($_SERVER["REQUEST_METHOD"]) {
         case "GET": { // get logged user
-            
             SessionRequestHandler::requireLoggedUser();
 
             $userData = UserRequestHandler::getUserById($_SESSION["id"]);
-
             echo json_encode($userData);
 
             break;
@@ -21,10 +19,10 @@
             $user = SessionRequestHandler::login($loginData);
                 
             $_SESSION["logged"] = true;
-            $_SESSION["id"] = $user->id;
-            $_SESSION["typeId"] = $user->userTypeId;
+            $_SESSION["id"] = $user['id'];
+            $_SESSION["typeId"] = $user['userTypeId'];
             
-            echo json_encode(["success" => $logged]);
+            echo json_encode(["success" => true]);
             break;
         }
         case "PUT" : {

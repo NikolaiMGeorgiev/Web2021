@@ -5,13 +5,13 @@
 
     switch($_SERVER["REQUEST_METHOD"]) {
         case "GET": { // get user by id
-
             if (!isset($_GET["id"]) || !$_GET["id"]) {
                 throw new BadRequestException("The user id parameter should be provided");
             } else {
                 $returnData = UserRequestHandler::getUserById($_GET["id"]);
             }
-
+            
+            $returnData = UserRequestHandler::getUserById($_SESSION["id"]);
             echo json_encode($returnData);
 
             break;

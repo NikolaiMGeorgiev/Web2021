@@ -6,7 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/panel.css">
-        <script src="scripts/panel.js"></script>
+        <link rel="stylesheet" href="css/add_room.css">
+        <script src="scripts/panel.js" defer></script>
     </head>
     <body>
         <header id="main_header">
@@ -38,10 +39,32 @@
         <main class="centered-column">
             <div id="events-wrapper">
                 <header id="page_header">
-                    <h1>Предстоящи събития</h1>
+                    <h1>Добавяне на нова стая</h1>
                 </header>
-                <section id="events">
-                    
+                <section id="form">
+                    <form action="POST">
+                        <div id="information">
+                            <div class="form-item">
+                                <label for="name">Име: </label>
+                                <input type="text" id="name" name="name">
+                            </div>
+                            <div class="form-item">
+                                <label for="meetInterval">Време за среща: </label>
+                                <input type="number" id="meetInterval" name="meetInterval">
+                            </div>
+                            <div class="form-item">
+                                <label for="waitingInterval">Време за чакане:</label>
+                                <input type="number" id="waitingInterval" name="waitingInterval">
+                            </div>
+                            <div class="form-item">
+                                <label for="start">Дата и час: </label>
+                                <input type="date" id="start" name="start">
+                            </div>
+                        </div>
+                        <div id="schedule" class="form-item">
+                            
+                        </div>
+                    </form>
                 </section>
             </div>
         </main>

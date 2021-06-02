@@ -1,26 +1,40 @@
-window.onload = function () {
-    let userType = 2;
+window.onload = async function () {
+    var userType;
+    const userData = await fetch('http://localhost/Web2021/endpoints/session.php', {
+        method: 'GET'
+    }).then(data => data.json());
 
+    if (userData['fn']) {
+        userType = 1;
+    } else {
+        userType = 2;
+    }
+    
     document.getElementById("nav_panel").addEventListener("click", function () {
         window.location.href = "panel.html";
     });
     document.getElementById("nav_profile").addEventListener("click", function () {
         window.location.href = "profile.html";
     });
+    document.getElementById("nav_exit").addEventListener("click", function () {
+        logout();
+    });
 
     if (userType === 2) {
         addCreateEventButton();
+        document.getElementById("nav_new_room").addEventListener("click", function () {
+            window.location.href = "add_room.html";
+        });
     }
 
     if (document.getElementById("events")) {
-        loadEvents();
+        loadEvents(userType);
     } else if (document.getElementById("profile")) {
-        loadUserInfo();
+        loadUserInfo(userType);
     }
 };
 
-function loadEvents () {
-    let userType = 1;
+function loadEvents (userType) {
     let events = {
         "1": {
             "name": "АСИ",
@@ -122,15 +136,11 @@ function addCreateEventButton () {
     topBar.parentNode.insertBefore(buttonContainer, topBar.nextSibling);
 }
 
-function loadUserInfo () {
-    var userType = 1;
-    var userData = {
-        "name": "Име Фамилия",
-        "email": "test@example.com",
-        "fn": "62666",
-        "degree": "Софтуерно инженерство",
-        "year": 3
-    }
+async function loadUserInfo (userType) {
+    const userData = await fetch('http://localhost/Web2021/endpoints/session.php', {
+        method: 'GET'
+    }).then(data => data.json());
+
     var container = document.getElementById("profile");
     var userHTML = getUserHTML(userType, userData);
     container.innerHTML = userHTML;
@@ -140,7 +150,7 @@ function getUserHTML (userType, userData) {
     if (userType === 1) {
         var userHTML = 
             '<div class="row columns">' +
-                '<h2>Име: <span class="lighter">' + userData['name'] + '</span></h2>' +
+                '<h2>Име: <span class="lighter">' + userData['username'] + '</span></h2>' +
                 '<h2 id="fn">ФН: <span class="lighter">' + userData['fn'] + '</span></h2>' +
             '</div>' +
             '<h2 class="row">Имейл: <span class="lighter">' + userData['email'] + '</span></h2>' +
@@ -148,9 +158,19 @@ function getUserHTML (userType, userData) {
             '<h2 class="row">Година: <span class="lighter">' + userData['year'] + '</span></h2>';
     } else {
         var userHTML = 
-            '<h2>Име: <span class="lighter">' + userData['name'] + '</span></h2>' +
+            '<h2>Име: <span class="lighter">' + userData['username'] + '</span></h2>' +
             '<h2 class="row">Имейл: <span class="lighter">' + userData['email'] + '</span></h2>';
     }
 
     return userHTML;
+}
+
+async function logout () {
+    const response = await fetch('http://localhost/Web2021/endpoints/session.php', {
+        method: 'DELETE'
+    }).then(data => data.json());
+
+    if(response["success"]) {
+        window.location.href = "index.html";
+    }
 }

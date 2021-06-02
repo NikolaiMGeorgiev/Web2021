@@ -6,12 +6,12 @@
 
     switch($_SERVER["REQUEST_METHOD"]) {
         case "GET": { 
-            SessionRequestHandler::requreLoggedTeacher();
+            SessionRequestHandler::requireLoggedTeacher();
 
             
         }
         case "POST": { // create room
-            SessionRequestHandler::requreLoggedTeacher();
+            SessionRequestHandler::requireLoggedTeacher();
 
             $newRoomData = json_decode(file_get_contents("php://input"), true);
 

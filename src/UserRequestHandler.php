@@ -59,11 +59,10 @@
                 "userTypeId" => $user["userTypeId"]
             ]);
 
-
             if ($stmt->fetch(PDO::FETCH_ASSOC)["code"] == "STUDENT") {
                 $stmt = $connection->prepare("SELECT * FROM students_details WHERE userId=:userId");
                 $stmt->execute([
-                    "usedId" => $user[$user["id"]]
+                    "userId" => $user["id"]
                 ]);
 
                 $student = $stmt->fetch();
@@ -71,7 +70,6 @@
                 if (!$student) {
                     throw new NoutFoundException();
                 }
-
                 $returnUser = new Student($user["name"], $user["email"], $student["fn"], $student["year"], $student["degree"]);
             } else {
                 $returnUser = new User($user["name"], $user["email"]);

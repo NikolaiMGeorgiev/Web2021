@@ -37,10 +37,12 @@
 
          // Override
          public function jsonSerialize(): array {
-            $fieldsToSerialize = ["username", "email", "fn", "year", "degree"];
+            $fieldsToSerialize = ["fn", "year", "degree"];
     
             $jsonArray = [];
-    
+            $jsonArray["username"] = $this->getUsername();
+            $jsonArray["email"] = $this->getEmail();
+
             foreach ($fieldsToSerialize as $field) {
                 $jsonArray[$field] = $this->$field;
             }

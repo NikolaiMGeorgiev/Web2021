@@ -12,7 +12,7 @@
             
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM users WHERE name=:email");
+            $stmt = $connection->prepare("SELECT * FROM users WHERE email=:email");
             $stmt->execute([
                 "email" => $loginData["email"]
             ]);
@@ -20,7 +20,7 @@
             $user = $stmt->fetch();
 
             if (!$user || !password_verify($loginData["password"], $user["password"])) {
-                throw new NoutFoundException("Incorrect data");
+                throw new NotFoundException("Incorrect data");
             }
 
             return $user;
@@ -32,7 +32,7 @@
             }
         }
 
-        public static function requreLoggedTeacher() {
+        public static function requireLoggedTeacher() {
             if (!$_SESSION["logged"] || !$_SESSION["id"] || $_SESSION["typeId"]!=self::teacherTypeId) {
                 throw new AuthorizationException();
             }
