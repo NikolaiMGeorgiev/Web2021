@@ -5,7 +5,6 @@
 
     switch($_SERVER["REQUEST_METHOD"]) {
         case "GET": { // get user by id
-            SessionRequestHandler::requireLoggedUser();
 
             if (!isset($_GET["id"]) || !$_GET["id"]) {
                 throw new BadRequestException("The user id parameter should be provided");

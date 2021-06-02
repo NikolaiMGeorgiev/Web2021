@@ -5,29 +5,35 @@
     AppBootStrap::init();
 
     class SessionRequestHandler {
+        const studentTypeId = 1;
+        const teacherTypeId = 2;
 
-        public static function login(array $loginData) : bool {
+        public static function login(array $loginData) {
             
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM users WHERE email=:email");
+            $stmt = $connection->prepare("SELECT * FROM users WHERE name=:email");
             $stmt->execute([
                 "email" => $loginData["email"]
             ]);
             
             $user = $stmt->fetch();
 
-            if (!$user) {
-                return false;
-            } else if (!password_verify($loginData["password"], $user["password"])) {
-                return false;
+            if (!$user || !password_verify($loginData["password"], $user["password"])) {
+                throw new NoutFoundException("Incorrect data");
             }
 
-            return true;
+            return $user;
         }
 
         public static function requireLoggedUser() {
-            if (!$_SESSION["logged"]) {
+            if (!$_SESSION["logged"] || !$_SESSION["id"]) {
+                throw new AuthorizationException();
+            }
+        }
+
+        public static function requreLoggedTeacher() {
+            if (!$_SESSION["logged"] || !$_SESSION["id"] || $_SESSION["typeId"]!=self::teacherTypeId) {
                 throw new AuthorizationException();
             }
         }

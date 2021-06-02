@@ -2,8 +2,10 @@
 
     class AppBootStrap {
 
-        public static function init() {
-            //session_start();
+        public static function init($flag = false) {
+            if ($flag) {
+                session_start();
+            }
 
             spl_autoload_register(function ($className) {
                 require_once("../src/" . $className . ".php");

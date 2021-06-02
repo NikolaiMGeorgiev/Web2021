@@ -8,6 +8,8 @@
 
         private $degree;
 
+        private const typeId = 1;
+
         public function __construct(string $username, string $email, int $fn, int $year, 
                 string $degree ) {
             parent::__construct($username, $email);
@@ -15,6 +17,10 @@
             $this->fn = $fn;
             $this->year = $year;
             $this->degree = $degree;
+        }
+
+        public function getTypeId() : int {
+            return self::typeId;
         }
 
         public function getFn() : int {

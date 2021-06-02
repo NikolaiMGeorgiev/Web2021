@@ -5,22 +5,24 @@
     AppBootStrap::init();
 
     switch($_SERVER["REQUEST_METHOD"]) {
-        case "GET": {
+        case "GET": { // get logged user
             
+            SessionRequestHandler::requireLoggedUser();
 
+            $userData = UserRequestHandler::getUserById($_SESSION["id"]);
+
+            echo json_encode($userData);
 
             break;
         }
         case "POST": { // login
             $loginData = json_decode(file_get_contents("php://input"), true);
 
-            $logged = SessionRequestHandler::login($loginData);
-            
-            if ($logged) {
-                session_start();
+            $user = SessionRequestHandler::login($loginData);
                 
-                $_SESSION["logged"] = true;
-            }
+            $_SESSION["logged"] = true;
+            $_SESSION["id"] = $user->id;
+            $_SESSION["typeId"] = $user->userTypeId;
             
             echo json_encode(["success" => $logged]);
             break;
