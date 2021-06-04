@@ -12,9 +12,21 @@
             });
 
             set_exception_handler(function($exception) {
-                $response_body = [
-                    "message" => "Error"
-                ];
+                $response_body = [];
+    
+                if ($exception instanceof BadRequestException) {
+                    http_response_code(400);
+                    $response_body = ["message" => $exception->getMessage()];
+                } else if ($exception instanceof NotFoundException) {
+                    http_response_code(404);
+                    $response_body = ["message" => $exception->getMessage()];
+                } else if ($exception instanceof AuthorizationException) {
+                    http_response_code(403);
+                    $response_body = ["message" => $exception->getMessage()];
+                } else {
+                    http_response_code(500);
+                    $response_body = ["message" => "Unknown error. Please try your request later"];
+                }
                 
                 echo json_encode($response_body, JSON_UNESCAPED_UNICODE);
             });

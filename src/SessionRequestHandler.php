@@ -9,6 +9,9 @@
         const teacherTypeId = 2;
 
         public static function login(array $loginData) {
+            if (!$loginData) {
+                throw new BadRequestException("Login data should be provided");
+            }
             
             $connection = self::initConnection();
 
@@ -20,7 +23,7 @@
             $user = $stmt->fetch();
 
             if (!$user || !password_verify($loginData["password"], $user["password"])) {
-                throw new NotFoundException("Incorrect data");
+                throw new BadRequestException("Incorrect data");
             }
 
             return $user;

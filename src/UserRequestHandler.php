@@ -7,6 +7,10 @@
     class UserRequestHandler {
 
         public static function createUser(array $userInfo) {
+            if (!$userInfo) {
+                throw new BadRequestException("User data should be provided");
+            }
+            
             $connection = self::initConnection();
 
             $hashed_password = password_hash($userInfo["password"], PASSWORD_DEFAULT);
@@ -40,6 +44,10 @@
         }
 
         public static function getUserById(int $id) {
+            if (!$id) {
+                throw new BadRequestException("User id should be provided");
+            }
+
             $connection = self::initConnection();
 
             $stmt = $connection->prepare("SELECT * FROM users WHERE id=:id");
@@ -51,7 +59,7 @@
             $user = $stmt->fetch();
 
             if (!$user) {
-                throw new NoutFoundException();
+                throw new NotFoundException();
             }
 
             $stmt = $connection->prepare("SELECT * FROM usertypes WHERE id=:userTypeId");
@@ -68,7 +76,7 @@
                 $student = $stmt->fetch();
                 
                 if (!$student) {
-                    throw new NoutFoundException();
+                    throw new NotFoundException();
                 }
                 $returnUser = new Student($user["name"], $user["email"], $student["fn"], $student["year"], $student["degree"]);
             } else {
