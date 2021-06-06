@@ -2,7 +2,7 @@
 
     require_once("AppBootStrap.php");
     
-    AppBootStrap::init();
+    AppBootStrap::init(true);
 
     class SessionRequestHandler {
         const studentTypeId = 1;
@@ -36,7 +36,7 @@
         }
 
         public static function requireLoggedTeacher() {
-            if (!$_SESSION["logged"] || !$_SESSION["id"] || $_SESSION["typeId"]!=self::teacherTypeId) {
+            if (!$_SESSION["logged"] || !$_SESSION["id"] || $_SESSION["typeId"] != self::teacherTypeId) {
                 throw new AuthorizationException();
             }
         }

@@ -111,9 +111,12 @@ button {
     align-items: center;
 }
 
+.scrollable {
+    overflow-y: scroll;
+}
+
 .gradient-btn {
     font-weight: bold;
-    box-sizing: border-box;
     color: white;
     font-size: 0.9rem;
     padding: 5px 10px;
@@ -127,6 +130,27 @@ button {
     background: rgb(20,79,134);
     background: linear-gradient(45deg, rgba(20,79,134,1) 10%, rgb(97, 179, 255) 50%, rgba(20,79,134,1) 90%);
     border-color: rgb(33, 47, 59);
+}
+
+.gradient-cancel-btn {
+    font-weight: bold;
+    color: white;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    background: rgb(139,14,14);
+    background: linear-gradient(45deg, rgba(139,14,14,1) 0%, rgba(227,93,93,1) 50%, rgba(139,14,14,1) 100%);
+    border: 2px solid rgb(43, 59, 74);
+    border-radius: 3px;
+}
+
+.gradient-cancel-btn:hover {
+    background: rgb(193,16,16);
+    background: linear-gradient(45deg, rgba(193,16,16,1) 0%, rgba(255,117,117,1) 50%, rgba(193,16,16,1) 100%);
+    border-color: rgb(33, 47, 59);
+}
+
+.input-error {
+    border: 1px solid rgb(193,16,16);
 }
 
 ::-webkit-scrollbar {
@@ -144,10 +168,6 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
 }
 
 @media (max-width: 380px) {

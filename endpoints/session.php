@@ -2,7 +2,7 @@
 
     require_once("../src/AppBootStrap.php");
 
-    AppBootStrap::init(true);
+    AppBootStrap::init();
 
     switch($_SERVER["REQUEST_METHOD"]) {
         case "GET": { // get logged user

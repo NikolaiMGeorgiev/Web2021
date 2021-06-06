@@ -1,4 +1,4 @@
-window.onload = async function () {
+window.onload = async function init() {
     var userType;
     const userData = await fetch('http://localhost/Web2021/endpoints/session.php', {
         method: 'GET'
@@ -168,9 +168,9 @@ function getUserHTML (userType, userData) {
 async function logout () {
     const response = await fetch('http://localhost/Web2021/endpoints/session.php', {
         method: 'DELETE'
-    }).then(data => data.json());
+    }).then(data => data.json()).then(data => console.log(data));
 
-    if(response["success"]) {
+    if(response.success) {
         window.location.href = "index.html";
     }
 }

@@ -1,6 +1,6 @@
-window.onload = function () {
+function init() {
     if (document.getElementById("login-btn")) {
-        document.getElementById("login-btn").addEventListener("click",function () {
+        document.getElementById("login-btn").addEventListener("click", function () {
             postForm('login', 2);
         });
     }
@@ -43,8 +43,7 @@ async function postForm (formType, userTypeId = 0) {
             },
             body: data,
         }).then(data => data.json());
-        response = formType === "register" ? responseJSON['userId'] : responseJSON['success'];
-        console.log(responseJSON['success']);
+        response = responseJSON.success;
 
         if (!response && !document.getElementById("error_validation")) {
             let inputs = document.getElementsByTagName("input");
@@ -129,3 +128,5 @@ function getFormDataJSON (userTypeId) {
 function redirect (page) {
     window.location.href = window.location.href.replace("register", page);
 }
+
+init();

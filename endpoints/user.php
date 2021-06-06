@@ -21,7 +21,7 @@
 
             $userId = UserRequestHandler::createUser($newPersonData);
             
-            echo json_encode(["userId" => $userId]);
+            echo json_encode(["success" => true]);
             break;
         }
         case "PUT" : {

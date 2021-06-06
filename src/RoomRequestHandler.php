@@ -13,7 +13,12 @@
 
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare("INSERT INTO rooms (name,waitingInterval, meetInterval,
+            if(!isset($_SESSION)) 
+            { 
+                session_start(); 
+            } 
+
+            $stmt = $connection->prepare("INSERT INTO rooms (name, waitingInterval, meetInterval,
                 userId, start) VALUES (:name, :waitingInterval, :meetInterval, :userId, :start)");
             $success = $stmt->execute([
                 "name" => $roomData["name"],

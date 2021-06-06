@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="css/panel.css">
         <link rel="stylesheet" href="css/add_room.css">
         <script src="scripts/panel.js" defer></script>
+        <script src="scripts/add_room.js" defer></script>
     </head>
     <body>
         <header id="main_header">
@@ -42,8 +43,8 @@
                     <h1>Добавяне на нова стая</h1>
                 </header>
                 <section id="form">
-                    <form action="POST">
-                        <div id="information">
+                    <form id="schedule_from" action="">
+                        <fieldset id="information" class="form-itmes-conrainer">
                             <div class="form-item">
                                 <label for="name">Име: </label>
                                 <input type="text" id="name" name="name">
@@ -57,12 +58,30 @@
                                 <input type="number" id="waitingInterval" name="waitingInterval">
                             </div>
                             <div class="form-item">
-                                <label for="start">Дата и час: </label>
-                                <input type="date" id="start" name="start">
+                                <label for="date">Дата: </label>
+                                <input type="date" id="date" name="date">
                             </div>
-                        </div>
-                        <div id="schedule" class="form-item">
-                            
+                            <div class="form-item">
+                                <label for="time">Начало:</label>
+                                <input type="time" id="time" name="time">
+                            </div>
+                            <div class="form-item" id="room-btn-container">
+                                <button type="submit" id="save_btn" class="gradient-btn">Запиши</button>
+                                <button type="button" id="cancel_btn" class="gradient-cancel-btn">Откажи</button>
+                            </div>
+                        </fieldset>
+                        <div id="schedule-wrapper" class="form-itmes-conrainer">
+                            <div id="schedule-container" class="scrollable">
+                                <fieldset id="scheduled_users" class="centered-column">
+                                    <legend id="column_names">
+                                        <span>Имейл:</span>
+                                        <span>Час:</span>
+                                    </legend>
+                                    <div id="schedule">
+        
+                                    </div>
+                                </fieldset>
+                            </div>
                         </div>
                     </form>
                 </section>
