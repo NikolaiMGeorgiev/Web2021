@@ -78,9 +78,9 @@
                 if (!$student) {
                     throw new NotFoundException();
                 }
-                $returnUser = new Student($user["name"], $user["email"], $student["fn"], $student["year"], $student["degree"]);
+                $returnUser = new Student($user["name"], $user["email"], $user["id"], $student["fn"], $student["year"], $student["degree"]);
             } else {
-                $returnUser = new User($user["name"], $user["email"]);
+                $returnUser = new User($user["name"], $user["email"], $user["id"]);
             }
 
             return $returnUser;

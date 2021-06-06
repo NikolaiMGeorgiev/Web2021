@@ -2,17 +2,23 @@
 
 class Room implements JsonSerializable
 {
+    private $id;
     private $name;
     private $waitingInterval;
     private $meetInterval;
     private $start;
 
-    public function __construct($name, $waitingInterval, $meetInterval, $start)
+    public function __construct($name, $waitingInterval, $meetInterval, $start, $id)
     {
         $this->name = $name;
         $this->waitingInterval = $waitingInterval;
         $this->meetInterval = $meetInterval;
         $this->start = $start;
+        $this->id = $id;
+    }
+    
+    public function getId() {
+        return $this->id;
     }
     
     public function getName() {

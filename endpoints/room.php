@@ -5,10 +5,12 @@
 
 
     switch($_SERVER["REQUEST_METHOD"]) {
-        case "GET": { 
-            SessionRequestHandler::requireLoggedTeacher();
+        case "GET": {  // get rooms by user 
+            SessionRequestHandler::requireLoggedUser();
 
-            
+            $roomsData = RoomRequestHandler::getUserRooms($_SESSION["id"]);
+
+            echo json_encode($roomsData);
         }
         case "POST": { // create room
             SessionRequestHandler::requireLoggedTeacher();
@@ -21,6 +23,7 @@
             break;
         }
         case "PUT" : {
+            
             break;
         }
         case "DELETE" : {

@@ -10,9 +10,9 @@
 
         private const typeId = 1;
 
-        public function __construct(string $username, string $email, int $fn, int $year, 
+        public function __construct(string $username, string $email, int $id, int $fn, int $year, 
                 string $degree ) {
-            parent::__construct($username, $email);
+            parent::__construct($username, $email, $id);
 
             $this->fn = $fn;
             $this->year = $year;
@@ -42,6 +42,7 @@
             $jsonArray = [];
             $jsonArray["username"] = $this->getUsername();
             $jsonArray["email"] = $this->getEmail();
+            $jsonArray["id"] = $this->getId();
 
             foreach ($fieldsToSerialize as $field) {
                 $jsonArray[$field] = $this->$field;

@@ -7,8 +7,12 @@
                 session_start();
             }
 
-            spl_autoload_register(function ($className) {
-                require_once("../src/" . $className . ".php");
+            spl_autoload_register(function($className) {
+                if (str_contains($className,"Exception")) {
+                    require_once("../exceptions/" . $className . ".php");
+                } else {
+                    require_once("../src/" . $className . ".php");
+                }
             });
 
             set_exception_handler(function($exception) {

@@ -4,11 +4,13 @@ class User implements JsonSerializable
 {
     private $username;
     private $email;
+    private $id;
 
-    public function __construct(string $username, string $email)
+    public function __construct(string $username, string $email, int $id)
     {
         $this->username = $username;
         $this->email = $email;
+        $this->id = $id;
     }
     
     public function getUsername() : string {
@@ -17,11 +19,15 @@ class User implements JsonSerializable
 
     public function getEmail() : string {
         return $this->email;
-
     }
 
+    public function getId() : int {
+        return $this->id;
+    }
+
+    // Override
     public function jsonSerialize(): array {
-        $fieldsToSerialize = ["username", "email"];
+        $fieldsToSerialize = ["username", "email", "id"];
 
         $jsonArray = [];
 

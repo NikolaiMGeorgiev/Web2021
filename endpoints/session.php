@@ -26,6 +26,7 @@
             break;
         }
         case "PUT" : {
+            $loginData = json_decode(file_get_contents("php://input"), true);file_get_contents( 'php://input', 'r' );
             break;
         }
         case "DELETE" : { // logout

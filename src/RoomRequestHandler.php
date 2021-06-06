@@ -29,6 +29,47 @@
             ]);
 
             $roomId = $connection->lastInsertId();
+            
+            $emails = $roomData["schedule"];
+
+            if (!$emails) {
+                throw new BadRequestException("Users emails should be provided");
+            }
+
+            $index = 1;
+
+            $studentsData = [];
+
+            $list = "(";
+
+            foreach ($emails as $email) {
+                $studentsData[$email]["index"] = $index;
+                $index++;
+                $list = $list . $email . ",";
+            }
+
+            $list = substr_replace($list ,"",-1);
+            $list = $list . ")";
+            
+
+            $stmt = $connection->prepare("SELECT * FROM users WHERE email IN :list");
+            $success = $stmt->execute([
+                "list" => $list
+            ]);
+
+            while ($row = $stmt->fetch()) {
+                $studentsData[$row["email"]]["id"] = $row["id"];
+            }
+
+            foreach ($studentsData as $student) {
+                $stmt = $connection->prepare(
+                    "INSERT INTO schedule (userId, roomId, index) VALUES (:userId, :roomId, :index)");
+                $stmt->execute([
+                    "userId" => $student["id"],
+                    "roomId" => $roomId,
+                    "index" => $student["index"]
+                ]);
+            }
 
             return $roomId;
         }
@@ -48,11 +89,10 @@
             $rooms = [];
 
             while ($row = $stmt->fetch()) {
-                $rooms[] = new Room($row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]);
+                $rooms[] = new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]);
             }
 
             return $rooms;
-
         }
 
         private static function initConnection() {
