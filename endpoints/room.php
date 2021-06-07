@@ -11,6 +11,7 @@
             $roomsData = RoomRequestHandler::getUserRooms($_SESSION["id"]);
 
             echo json_encode($roomsData);
+            break;
         }
         case "POST": { // create room
             SessionRequestHandler::requireLoggedTeacher();

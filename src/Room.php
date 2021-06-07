@@ -8,7 +8,7 @@ class Room implements JsonSerializable
     private $meetInterval;
     private $start;
 
-    public function __construct($name, $waitingInterval, $meetInterval, $start, $id)
+    public function __construct($id, $name, $waitingInterval, $meetInterval, $start)
     {
         $this->name = $name;
         $this->waitingInterval = $waitingInterval;

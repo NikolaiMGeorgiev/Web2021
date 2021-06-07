@@ -2,8 +2,8 @@
 
     class AppBootStrap {
 
-        public static function init($flag = false) {
-            if ($flag) {
+        public static function init() {
+            if (!isset($_SESSION)) {
                 session_start();
             }
 

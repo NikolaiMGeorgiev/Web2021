@@ -26,6 +26,7 @@ function init() {
     });
 
     document.getElementById("schedule_from").addEventListener("submit", function (event) {
+    event.preventDefault();
         if (validateFormInput() && validateUsersInput()) {
             postForm();
             event.preventDefault();
@@ -46,7 +47,7 @@ async function postForm () {
         },
         body: getFormData(),
     }).then(data => data.json());
-    
+
     if (response.success) {
         window.location.href = "panel.html";
     } else {
@@ -64,7 +65,7 @@ function getFormData () {
         "name": document.getElementById("name").value,
         "waitingInterval": document.getElementById("waitingInterval").value,
         "meetInterval": document.getElementById("meetInterval").value,
-        "start": document.getElementById("date").value,
+        "start": document.getElementById("date").value + " " + document.getElementById("time").value,
         "schedule": schedule
     };
 
@@ -163,6 +164,20 @@ function buttonsInit (addButton, removeButton) {
             changeTime(document.getElementById("time").value);
         }
     });
+}
+
+function getStartDateAndTime (date, time) {
+    var start = new Date();
+    var startDate = date.value.split("-");
+    var startTime = time.value.split(":");
+
+    start.setDate(startDate[2]);
+    start.setMonth(startDate[1]);
+    start.setFullYear(startDate[0]);
+    start.setHours(startTime[0]);
+    start.setMinutes(startTime[1]);
+
+    return start;
 }
 
 init();

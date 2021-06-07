@@ -34,54 +34,41 @@ window.onload = async function init() {
     }
 };
 
-function loadEvents (userType) {
-    let events = {
-        "1": {
-            "name": "АСИ",
-            "start": "08.06.20",
-            "teacher": "преподавател",
-            "place": 4,
-            "placeTime": "11:40",
-            "studentsCount": 47,
-            "meetInterval": 15,
-            "waitingInterval": 1
-        },
-        "2": {
-            "name": "АСИ",
-            "start": "08.06.20",
-            "teacher": "преподавател",
-            "place": "4",
-            "placeTime": "11:40",
-            "studentsCount": 47,
-            "meetInterval": 15,
-            "waitingInterval": 1
-        },
-        "3": {
-            "name": "АСИ",
-            "start": "08.06.20",
-            "teacher": "преподавател",
-            "place": "4",
-            "placeTime": "11:40",
-            "studentsCount": 47,
-            "meetInterval": 15,
-            "waitingInterval": 1
-        }
-    }
+async function loadEvents (userType) {
+    const events = await fetch('http://localhost/Web2021/endpoints/room.php', {
+        method: 'GET'
+    }).then(data => data.json());
 
     var container = document.getElementById("events");
-    for (var eventId in events) {
-        var eventHTML = getEventHTML(userType, eventId, events);
-        container.insertAdjacentHTML('beforeend', eventHTML);
+
+    if(events.length) {
+        for (var eventId in events) {
+            var eventHTML = getEventHTML(userType, eventId, events);
+            container.insertAdjacentHTML('beforeend', eventHTML);
+        }
+    } else {
+        var message = userType == 1 ? 
+            '<p>Няма събития, за които да сте поканени.</p>' :
+            '<p>Нямате създадени събития.</p>';
+        var noEventsMessage = 
+            '<div class="event-info-container">' + 
+                message +
+            '</div>';
+        container.insertAdjacentHTML('beforeend', noEventsMessage);
     }
 }
 
 function getEventHTML (userType, eventId, events) {
+    var startData = events[eventId]["start"].split(" ");
+    var date = startData[0].split("-");
+    var time = startData[1].split(":");
+    var start = date[2] + "." + date[1] + "." + date[0] + " в " + time[0] + ":" + time[1] + "ч.";
     if (userType === 1) {
         var eventHTML =
             '<div class="event">' +
                 '<header>' +
                     '<h2 class="name" class="bold">' + events[eventId]["name"] + '</h2>' +
-                    '<h3 class="date">' + events[eventId]["start"] + '</h3>' +
+                    '<h3 class="date">' + start + '</h3>' +
                 '</header>' +
                 '<article class="event-info-container one-row">' +
                     '<h3 class="place">' +
@@ -103,7 +90,7 @@ function getEventHTML (userType, eventId, events) {
             '<div class="event">' +
                 '<header>' +
                     '<h2 class="name" class="bold">' + events[eventId]["name"] + '</h2>' +
-                    '<h3 class="date">' + events[eventId]["start"] + '</h3>' +
+                    '<h3 class="date">' + start + '</h3>' +
                 '</header>' +
                 '<article class="event-info-container one-row-even">' +
                     '<h3 class="studetns-count">' +
@@ -168,7 +155,7 @@ function getUserHTML (userType, userData) {
 async function logout () {
     const response = await fetch('http://localhost/Web2021/endpoints/session.php', {
         method: 'DELETE'
-    }).then(data => data.json()).then(data => console.log(data));
+    }).then(data => data.json());
 
     if(response.success) {
         window.location.href = "index.html";

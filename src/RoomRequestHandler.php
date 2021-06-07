@@ -13,11 +13,6 @@
 
             $connection = self::initConnection();
 
-            if(!isset($_SESSION)) 
-            { 
-                session_start(); 
-            } 
-
             $stmt = $connection->prepare("INSERT INTO rooms (name, waitingInterval, meetInterval,
                 userId, start) VALUES (:name, :waitingInterval, :meetInterval, :userId, :start)");
             $success = $stmt->execute([
@@ -36,38 +31,33 @@
                 throw new BadRequestException("Users emails should be provided");
             }
 
-            $index = 1;
+            $place = 1;
 
             $studentsData = [];
 
-            $list = "(";
+            $list = "";
 
             foreach ($emails as $email) {
-                $studentsData[$email]["index"] = $index;
-                $index++;
-                $list = $list . $email . ",";
+                $studentsData[$email]["place"] = $place;
+                $place++;
+                $list = $list . "'". $email . "'" . ",";
             }
-
-            $list = substr_replace($list ,"",-1);
-            $list = $list . ")";
+            $list = substr_replace($list, "", -1);
+      
+            $stmt = $connection->prepare("SELECT * FROM users WHERE email IN ( " . $list . " )");
+            $success = $stmt->execute(); 
             
-
-            $stmt = $connection->prepare("SELECT * FROM users WHERE email IN :list");
-            $success = $stmt->execute([
-                "list" => $list
-            ]);
-
             while ($row = $stmt->fetch()) {
                 $studentsData[$row["email"]]["id"] = $row["id"];
             }
 
             foreach ($studentsData as $student) {
                 $stmt = $connection->prepare(
-                    "INSERT INTO schedule (userId, roomId, index) VALUES (:userId, :roomId, :index)");
+                    "INSERT INTO schedule (userId, roomId, place) VALUES (:userId, :roomId, :place)");
                 $stmt->execute([
                     "userId" => $student["id"],
                     "roomId" => $roomId,
-                    "index" => $student["index"]
+                    "place" => $student["place"]
                 ]);
             }
 
