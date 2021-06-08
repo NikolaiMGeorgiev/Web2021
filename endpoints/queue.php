@@ -6,16 +6,28 @@
 
     switch($_SERVER["REQUEST_METHOD"]) {
         case "GET": {  // get students in queue
+            SessionRequestHandler::requireLoggedTeacher();
 
-            echo json_encode($roomsData);
+            if (!isset($_GET["roomId"])) {
+                throw new BadRequestException("Room id shoud be provided");
+            }
+
+            $studentsData = QueueRequestHandler::getStudentsInQueue($_GET["roomId"], $_SESSION["id"]);
+
+            echo json_encode($studentsData);
         }
         case "POST": { // start (roomId)
+            SessionRequestHandler::requireLoggedTeacher();
 
+            $roomId = json_decode(file_get_contents("php://input"), true);
             
-            echo json_encode(["userId" => $userId]);
+            echo json_encode(["roomId" => $roomId]);
+            
             break;
         }
         case "PUT" : {
+            
+
             
             break;
         }

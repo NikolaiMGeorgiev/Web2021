@@ -25,6 +25,40 @@
             return $students;
         }
 
+        public static function addToQueue($userId, $roomId) {
+            if (!$userId || !$roomId) {
+                throw new BadRequestException("User and room id should be provided");
+            }
+
+            $connection = self::initConnection();
+
+            $stmt = $connection->prepare(
+                "SELECT * FROM schedule WHERE roomId=:roomId AND userId=:userId"
+            );
+
+            $stmt->execute([
+                "userId" => $userId,
+                "roomId" => $roomId
+            ]);
+
+            $user = $stmt->fetch();
+
+            if (!$user) {
+                throw new AuthorizationException("Student doesn't belong to this room");
+            }
+
+            $stmt = $connection->prepare(
+                "INSERT INTO queue (roomId, userId, userIndex) VALUES (:roomId, :userId, :userIndex)"
+            );
+
+            $stmt->execute([
+                "roomId" => $user["roomId"],
+                "userId" => $user["userId"],
+                "userIndex" => $user["place"]
+            ]);
+            
+        }
+
         private static function initConnection() {
             return (new DB())->getConnection();
         }
