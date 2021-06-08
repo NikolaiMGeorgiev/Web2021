@@ -25,6 +25,30 @@
             return $students;
         }
 
+        public static function getLink($roomId, $userId) {
+            if (!$userId || !$roomId) {
+                throw new BadRequestException("User and room id should be provided");
+            }
+
+            $connection = self::initConnection();
+
+            $stmt = $connection->prepare([
+                "SELECT *
+                FROM queues 
+                WHERE roomId=:roomId AND userId=:userId"
+            ]);
+
+            $student = $stmt->fetch();
+
+            if (!$student) {
+                throw new BadRequestException("Invalid student");
+            }
+
+            if ($student["active"]==0) {
+                throw new BadRequestException("There is already student in the room");
+            }
+        }
+
         public static function addToQueue($userId, $roomId) {
             if (!$userId || !$roomId) {
                 throw new BadRequestException("User and room id should be provided");

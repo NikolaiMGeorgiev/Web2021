@@ -30,8 +30,7 @@
 
                 $stmt = $connection->prepare(
                     "SELECT *
-                    FROM (SELECT * FROM queues WHERE roomId=:roomId) 
-                    WHERE roomId=(SELECT MIN(roomId) FROM queues)"
+                    FROM (SELECT * FROM queues WHERE roomId=:roomId AND MIN(userIndex)) "
                 );
 
                 $stmt->execute([
@@ -46,7 +45,6 @@
                      WHERE roomId=:roomId AND userId=:userId"
                 );
 
-
                 $stmt->execute([
                     "roomId" => $roomId,
                     "userId" => $userId
@@ -60,11 +58,12 @@
 
                 $stmt = $connection->prepare(
                     "DELETE FROM queues
-                     WHERE userId=:userId"
+                     WHERE userId=:userId AND roomId=:roomId"
                 );
 
                 $stmt->execute([
-                    "userId" => $userId
+                    "userId" => $userId,
+                    "roomId" => $roomId
                 ]);
             }
 
@@ -77,24 +76,16 @@
 
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM rooms WHERE roomId=:roomId");
-
-            $stmt->execute([
-                "roomId" => $roomId
-            ]);
-
-            $room = $stmt->fetch();
-            
-            if ($room["userId"] != $teacherId) {
-                throw new AuthorizationException("This room doesn't belong to this teacher");
-            }
-
             $stmt = $connection->prepare(
                 "SELECT *
                  FROM queues
                  WHERE roomId=:roomId 
                  ORDER BY userIndex ASC"
             );
+
+            $stmt->execute([
+                "roomId" => $roomId
+            ]);
             
             $students = [];
 
