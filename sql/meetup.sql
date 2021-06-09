@@ -2,10 +2,10 @@
 -- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 30, 2021 at 12:14 PM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 8.0.2
+-- Хост: 127.0.0.1
+-- Време на генериране:  9 юни 2021 в 19:46
+-- Версия на сървъра: 10.4.17-MariaDB
+-- Версия на PHP: 8.0.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `meetup`
+-- База данни: `meetup`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `comments`
+-- Структура на таблица `comments`
 --
 
 CREATE TABLE `comments` (
@@ -37,20 +37,32 @@ CREATE TABLE `comments` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `queues`
+-- Структура на таблица `queues`
 --
 
 CREATE TABLE `queues` (
   `id` int(10) NOT NULL,
   `userIndex` int(10) NOT NULL,
   `userId` int(10) NOT NULL,
-  `roomId` int(10) NOT NULL
+  `roomId` int(10) NOT NULL,
+  `active` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Схема на данните от таблица `queues`
+--
+
+INSERT INTO `queues` (`id`, `userIndex`, `userId`, `roomId`, `active`) VALUES
+(1, 1, 15, 55, 0),
+(2, 3, 18, 55, 0),
+(3, 2, 19, 55, 0),
+(4, 6, 17, 55, 0),
+(5, 5, 20, 55, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rooms`
+-- Структура на таблица `rooms`
 --
 
 CREATE TABLE `rooms` (
@@ -62,23 +74,41 @@ CREATE TABLE `rooms` (
   `userId` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Схема на данните от таблица `rooms`
+--
+
+INSERT INTO `rooms` (`id`, `name`, `waitingInterval`, `meetInterval`, `start`, `userId`) VALUES
+(55, 'Web', 2, 15, '2021-06-11 06:15:00', 8);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `schedule`
+-- Структура на таблица `schedule`
 --
 
 CREATE TABLE `schedule` (
   `id` int(10) NOT NULL,
-  `startTime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `userId` int(10) NOT NULL,
-  `roomId` int(10) NOT NULL
+  `roomId` int(10) NOT NULL,
+  `place` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Схема на данните от таблица `schedule`
+--
+
+INSERT INTO `schedule` (`id`, `userId`, `roomId`, `place`) VALUES
+(13, 15, 55, 1),
+(14, 20, 55, 2),
+(15, 17, 55, 3),
+(16, 18, 55, 4),
+(17, 19, 55, 5);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `students_details`
+-- Структура на таблица `students_details`
 --
 
 CREATE TABLE `students_details` (
@@ -89,10 +119,21 @@ CREATE TABLE `students_details` (
   `userId` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Схема на данните от таблица `students_details`
+--
+
+INSERT INTO `students_details` (`id`, `fn`, `degree`, `year`, `userId`) VALUES
+(4, 351515, 'swebw', '3', 15),
+(5, 63333, 'СИ', '6', 17),
+(6, 64444, 'СИ', '6', 18),
+(7, 61111, 'СИ', '6', 19),
+(8, 65555, 'СИ', '6', 20);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Структура на таблица `users`
 --
 
 CREATE TABLE `users` (
@@ -103,10 +144,22 @@ CREATE TABLE `users` (
   `userTypeId` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Схема на данните от таблица `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `password`, `email`, `userTypeId`) VALUES
+(8, 'Преподвател Преподавателски', '$2y$10$30ocrCeVl4Jm4NA0SLojCOqmx/9ASo29Ich124vQg75lrLdro2M26', 'test@example.com', 2),
+(15, 'Първи Първов', '$2y$10$hKnv/KoEu.aWVxk7xuyNbOtKaEg0/6DT1o.SFp/30uSUjKicNaQ8.', 'test2@example.com', 1),
+(17, 'Николай Георгиев', '$2y$10$LKY5lw8tJLCvazkJCiy//uT9N1aiqcytXniMY0let2Es3XFIhyG6O', 'ng@example.com', 1),
+(18, 'Ерик Здравков', '$2y$10$KZHODb2bz4ct6hn23q2YGOAZWeNwlZ61l6QbYZi4KXeGOo39JyAua', 'ez@example.com', 1),
+(19, 'Никол Георгиева', '$2y$10$Y3AEagZRpMTc3HOH1O/l1.bwUuks1pc9u04xmWkLA8qz5nRaUbiwq', 'ng2@example.com', 1),
+(20, 'Ерика Здравкова', '$2y$10$W3kfjWvz7T27JO4kMydrPeGcWtDnTKXF5nx36jomc.XZTRhxy7JJe', 'ez2@example.com', 1);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usertypes`
+-- Структура на таблица `usertypes`
 --
 
 CREATE TABLE `usertypes` (
@@ -116,7 +169,7 @@ CREATE TABLE `usertypes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `usertypes`
+-- Схема на данните от таблица `usertypes`
 --
 
 INSERT INTO `usertypes` (`id`, `name`, `code`) VALUES
@@ -128,7 +181,7 @@ INSERT INTO `usertypes` (`id`, `name`, `code`) VALUES
 --
 
 --
--- Indexes for table `comments`
+-- Индекси за таблица `comments`
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`),
@@ -136,7 +189,7 @@ ALTER TABLE `comments`
   ADD KEY `userId` (`userId`);
 
 --
--- Indexes for table `queues`
+-- Индекси за таблица `queues`
 --
 ALTER TABLE `queues`
   ADD PRIMARY KEY (`id`),
@@ -144,14 +197,14 @@ ALTER TABLE `queues`
   ADD KEY `userId` (`userId`);
 
 --
--- Indexes for table `rooms`
+-- Индекси за таблица `rooms`
 --
 ALTER TABLE `rooms`
   ADD PRIMARY KEY (`id`),
   ADD KEY `userId` (`userId`);
 
 --
--- Indexes for table `schedule`
+-- Индекси за таблица `schedule`
 --
 ALTER TABLE `schedule`
   ADD PRIMARY KEY (`id`),
@@ -159,21 +212,21 @@ ALTER TABLE `schedule`
   ADD KEY `roomId` (`roomId`);
 
 --
--- Indexes for table `students_details`
+-- Индекси за таблица `students_details`
 --
 ALTER TABLE `students_details`
   ADD PRIMARY KEY (`id`),
   ADD KEY `userId` (`userId`);
 
 --
--- Indexes for table `users`
+-- Индекси за таблица `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `userTypeId` (`userTypeId`);
 
 --
--- Indexes for table `usertypes`
+-- Индекси за таблица `usertypes`
 --
 ALTER TABLE `usertypes`
   ADD PRIMARY KEY (`id`);
@@ -192,31 +245,31 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `queues`
 --
 ALTER TABLE `queues`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `students_details`
 --
 ALTER TABLE `students_details`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `usertypes`
@@ -225,44 +278,45 @@ ALTER TABLE `usertypes`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- Constraints for dumped tables
+-- Ограничения за дъмпнати таблици
 --
 
 --
--- Constraints for table `comments`
+-- Ограничения за таблица `comments`
 --
 ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`roomId`) REFERENCES `rooms` (`id`),
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `queues`
+-- Ограничения за таблица `queues`
 --
 ALTER TABLE `queues`
   ADD CONSTRAINT `queues_ibfk_1` FOREIGN KEY (`roomId`) REFERENCES `rooms` (`id`),
-  ADD CONSTRAINT `queues_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `queues_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `queues_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `rooms`
+-- Ограничения за таблица `rooms`
 --
 ALTER TABLE `rooms`
   ADD CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `schedule`
+-- Ограничения за таблица `schedule`
 --
 ALTER TABLE `schedule`
   ADD CONSTRAINT `schedule_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`roomId`) REFERENCES `rooms` (`id`);
 
 --
--- Constraints for table `students_details`
+-- Ограничения за таблица `students_details`
 --
 ALTER TABLE `students_details`
   ADD CONSTRAINT `students_details_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `users`
+-- Ограничения за таблица `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userTypeId`) REFERENCES `usertypes` (`id`);
