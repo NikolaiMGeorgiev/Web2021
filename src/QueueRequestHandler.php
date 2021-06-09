@@ -14,23 +14,25 @@
 
             $connection = self::initConnection();
             
-            $stmt = $connection->prepare("SELECT * FROM rooms WHERE roomId=:roomId");
+            $stmt = $connection->prepare("SELECT * FROM rooms WHERE id=:roomId");
 
             $stmt->execute([
                 "roomId" => $roomId
             ]);
-
+            
             $room = $stmt->fetch();
 
             $waitingInterval = $room["waitingInterval"];
             $meetInterval = $room["meetInterval"];
             
             while (true) {
-                sleep($waitingInterval*self::secondsInMinute);
+                //sleep($waitingInterval*self::secondsInMinute);
+                print_r("before wait sleep");
+                sleep($waitingInterval);
+                print_r("after wait sleep");
 
                 $stmt = $connection->prepare(
-                    "SELECT *
-                    FROM (SELECT * FROM queues WHERE roomId=:roomId AND MIN(userIndex)) "
+                    "SELECT userId, MIN(userIndex) AS minIndex FROM queues WHERE roomId=:roomId"
                 );
 
                 $stmt->execute([
@@ -54,7 +56,11 @@
                     break;
                 }
 
-                sleep($meetInterval*self::secondsInMinute);
+                
+                print_r("before meet sleep");
+                //sleep($meetInterval*self::secondsInMinute);
+                sleep($meetInterval);
+                print_r("after meet sleep");
 
                 $stmt = $connection->prepare(
                     "DELETE FROM queues
@@ -69,36 +75,48 @@
 
         }
 
-        public static function getStudentsInQueue($roomId, $teacherId) {
+        public static function getStudentsInQueue($roomId) {
             if (!$roomId) {
                 throw new BadRequestException("Room id should be provided");
             }
 
             $connection = self::initConnection();
+<<<<<<< Updated upstream
+=======
+            $stmt = $connection->prepare("SELECT * FROM rooms WHERE id=:roomId");
+            $stmt->execute([
+                "roomId" => $roomId
+            ]);
+            $room = $stmt->fetch();
+>>>>>>> Stashed changes
 
             $stmt = $connection->prepare(
-                "SELECT *
-                 FROM queues
+                "SELECT * FROM queues
                  WHERE roomId=:roomId 
                  ORDER BY userIndex ASC"
             );
+<<<<<<< Updated upstream
 
             $stmt->execute([
                 "roomId" => $roomId
             ]);
             
+=======
+            $stmt->execute([
+                "roomId" => $roomId
+            ]);
+>>>>>>> Stashed changes
             $students = [];
 
             while ($row = $stmt->fetch()) {
                 $students[] = ["id" => $row["userId"]];
             }
 
+            return $students;
         }
 
         private static function initConnection() {
             return (new DB())->getConnection();
         }
-
     }
-
 ?>

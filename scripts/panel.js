@@ -35,7 +35,7 @@ window.onload = async function init() {
 };
 
 async function loadEvents (userType) {
-    const events = await fetch('http://localhost/Web2021/endpoints/room.php', {
+    var events = await fetch('http://localhost/Web2021/endpoints/room.php', {
         method: 'GET'
     }).then(data => data.json());
 
@@ -43,8 +43,16 @@ async function loadEvents (userType) {
 
     if(events.length) {
         for (var eventId in events) {
-            var eventHTML = getEventHTML(userType, eventId, events);
+            var eventHTML = getEventHTML(userType, events[eventId]);
             container.insertAdjacentHTML('beforeend', eventHTML);
+        }
+
+        var eventContainers = document.querySelectorAll(".event");
+
+        for (var event of eventContainers) {
+            event.addEventListener("click", function() {
+                window.location.href = "queue.html?roomId=" + event.getAttribute("id");
+            })
         }
     } else {
         var message = userType == 1 ? 
@@ -58,52 +66,48 @@ async function loadEvents (userType) {
     }
 }
 
-function getEventHTML (userType, eventId, events) {
-    var startData = events[eventId]["start"].split(" ");
+function getEventHTML (userType, event) {
+    var startData = event["start"].split(" ");
     var date = startData[0].split("-");
     var time = startData[1].split(":");
     var start = date[2] + "." + date[1] + "." + date[0] + " в " + time[0] + ":" + time[1] + "ч.";
     if (userType === 1) {
         var eventHTML =
-            '<div class="event">' +
+            '<div class="event" id="'+  event['id'] + '">' +
                 '<header>' +
-                    '<h2 class="name" class="bold">' + events[eventId]["name"] + '</h2>' +
+                    '<h2 class="name" class="bold">' + event["name"] + '</h2>' +
                     '<h3 class="date">' + start + '</h3>' +
                 '</header>' +
                 '<article class="event-info-container one-row">' +
                     '<h3 class="place">' +
                         '<span class="heading-label">Ред: </span>' + 
-                        '<span class="lighter">' + events[eventId]['place']  + '</span>' +
+                        '<span class="lighter">' + event['place']  + '</span>' +
                     '</h3>' +
                     '<h3 class="place_time">' +
                         '<span class="heading-label">Час за реда: </span>' +
-                        '<span class="lighter">' + events[eventId]['placeTime'] + '</span>' +
+                        '<span class="lighter">' + event['placeTime'] + '</span>' +
                     '</h3>' +
                     '<h3 class="teacher">' +
                         '<span class="heading-label">Препозавател: </span>' +
-                        '<span  class="lighter">' + events[eventId]['teacher'] + '</span>' +
+                        '<span  class="lighter">' + event['teacher'] + '</span>' +
                     '</h3>' +
                 '</article>' +
             '</div>';
     } else {
         var eventHTML =
-            '<div class="event">' +
+            '<div class="event" id="'+ event['id'] + '">' +
                 '<header>' +
-                    '<h2 class="name" class="bold">' + events[eventId]["name"] + '</h2>' +
+                    '<h2 class="name" class="bold">' + event["name"] + '</h2>' +
                     '<h3 class="date">' + start + '</h3>' +
                 '</header>' +
                 '<article class="event-info-container one-row-even">' +
-                    '<h3 class="studetns-count">' +
-                        '<span class="heading-label">Брой участници: </span>' + 
-                        '<span class="lighter">' + events[eventId]['studentsCount']  + '</span>' +
-                    '</h3>' +
                     '<h3 class="meet-interval">' +
                         '<span class="heading-label">Време за среща: </span>' +
-                        '<span class="lighter">' + events[eventId]['meetInterval'] + ' мин.</span>' +
+                        '<span class="lighter">' + event['meetInterval'] + ' мин.</span>' +
                     '</h3>' +
                     '<h3 class="waiting-interval">' +
                         '<span class="heading-label">Време за чакане: </span>' +
-                        '<span  class="lighter">' + events[eventId]['waitingInterval'] + ' мин.</span>' +
+                        '<span  class="lighter">' + event['waitingInterval'] + ' мин.</span>' +
                     '</h3>' +
                 '</article>' +
             '</div>';

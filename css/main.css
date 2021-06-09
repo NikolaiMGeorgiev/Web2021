@@ -35,6 +35,10 @@ button {
     cursor: pointer;
 }
 
+fieldset {
+    border: none;
+}
+
 #main_header {
     width: 100%;
     height: 64px;
@@ -108,6 +112,12 @@ button {
 .centered-column {
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 

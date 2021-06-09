@@ -39,7 +39,7 @@ class Room implements JsonSerializable
 
     //Override
     public function jsonSerialize() {
-        $fieldsToSerialize = ["name", "waitingInterval", "meetInterval", "start"];
+        $fieldsToSerialize = ["id" ,"name", "waitingInterval", "meetInterval", "start"];
 
         $jsonArray = [];
 

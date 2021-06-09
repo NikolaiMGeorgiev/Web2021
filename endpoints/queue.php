@@ -11,11 +11,10 @@
             if (!isset($_GET["roomId"])) {
                 throw new BadRequestException("Room id shoud be provided");
             }
-
-            $studentsData = QueueRequestHandler::getStudentsInQueue($_GET["roomId"], $_SESSION["id"]);
+            $studentsData = QueueRequestHandler::getStudentsInQueue($_GET["roomId"]);
 
             echo json_encode($studentsData);
-            
+            break;
         }
 
         case "POST": { // start queue
@@ -24,9 +23,8 @@
             $roomId = json_decode(file_get_contents("php://input"), true);
             
             QueueRequestHandler::startQueue($roomId);
-
-            echo json_encode(["userId" => $userId]);
-
+            
+            echo json_encode(["success" => true]);
             break;
         }
 

@@ -1,7 +1,13 @@
 function init() {
     if (document.getElementById("login-btn")) {
-        document.getElementById("login-btn").addEventListener("click", function () {
-            postForm('login', 2);
+        document.getElementById("login-btn").addEventListener("click", function (event) {
+            event.preventDefault();
+
+            if (validateInput()) {
+                postForm('login');
+            } else {
+                event.preventDefault();
+            }
         });
     }
 
@@ -17,48 +23,52 @@ function init() {
         });
     }
 
-    if (document.getElementById("student-btn")) {
-        document.getElementById("student-btn").addEventListener("click", function () {
-            postForm('register', 1);
+    if (document.getElementById("register_student_form")) {
+        document.getElementById("register_student_form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (validateInput()) {
+                postForm('register', 1);
+            } else {
+                event.preventDefault();
+            }
         });
     }
 
-    if (document.getElementById("teacher-btn")) {
-        document.getElementById("teacher-btn").addEventListener("click", function () {
-            postForm('register', 2);
+    if (document.getElementById("register_teacher_form")) {
+        document.getElementById("register_teacher_form").addEventListener("submit", function (event) {
+            if (validateInput()) {
+                postForm('register', 2);
+            } else {
+                event.preventDefault();
+            }
         });
     }
 };
 
 async function postForm (formType, userTypeId = 0) {
-    if (validateInput()) {
-        const data = userTypeId ? getFormDataJSON(userTypeId) : '';
-        const url = formType === "register" ? "http://localhost/Web2021/endpoints/user.php" :
-            "http://localhost/Web2021/endpoints/session.php";
-        var response;
-        const responseJSON = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: data,
-        }).then(data => data.json());
-        response = responseJSON.success;
+    const data = getFormDataJSON(userTypeId);
+    const url = formType === "register" ? "http://localhost/Web2021/endpoints/user.php" :
+        "http://localhost/Web2021/endpoints/session.php";
+    var response;
+    const responseJSON = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: data,
+    }).then(data => data.json());
+    response = responseJSON.success;
 
-        if (!response && !document.getElementById("error_validation")) {
-            let inputs = document.getElementsByTagName("input");
-            let lastInput = inputs[inputs.length - 1];
-            let error = document.createElement("small");
-            error.classList.add("error_field");
-            error.setAttribute("id", "error_validation");
-            error.textContent = "Невалидни входни данни";
-            
-            lastInput.parentNode.insertBefore(error, lastInput.nextSibling);
-        } else if (formType === 'register') {
-            window.location.href = 'register_success.html';
-        } else if (formType === 'login') {
-            window.location.href = 'panel.html';
-        }
+    if (!response && !document.getElementById("error_validation")) {
+        let inputs = document.getElementsByTagName("input");
+        let lastInput = inputs[inputs.length - 1];
+        let error = document.createElement("small");
+        error.classList.add("error_field");
+        error.setAttribute("id", "error_validation");
+        error.textContent = "Невалидни входни данни";
+        
+        lastInput.parentNode.insertBefore(error, lastInput.nextSibling);
     }
 }
 

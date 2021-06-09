@@ -24,7 +24,7 @@
 
             $roomId = json_decode(file_get_contents("php://input"), true);
 
-            StudentRequestHandler::addToQueue($_SESSION["id"],$roomId);
+            StudentsRequestHandler::addToQueue($_SESSION["id"], $roomId);
 
             echo json_encode(["success" => true]);
 

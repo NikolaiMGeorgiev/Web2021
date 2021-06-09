@@ -22,6 +22,7 @@
             $_SESSION["id"] = $user['id'];
             $_SESSION["typeId"] = $user['userTypeId'];
             
+            //header('Location: http://localhost/Web2021/panel.html');
             echo json_encode(["success" => true]);
             break;
         }

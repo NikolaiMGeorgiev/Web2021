@@ -4,7 +4,7 @@
     
     AppBootStrap::init();
 
-    class StudentRequestHandler {
+    class StudentsRequestHandler {
         const studentId = 1;
 
         public static function getAllStudents() {
@@ -72,7 +72,7 @@
             }
 
             $stmt = $connection->prepare(
-                "INSERT INTO queue (roomId, userId, userIndex) VALUES (:roomId, :userId, :userIndex)"
+                "INSERT INTO queues (roomId, userId, userIndex) VALUES (:roomId, :userId, :userIndex)"
             );
 
             $stmt->execute([
@@ -80,7 +80,6 @@
                 "userId" => $user["userId"],
                 "userIndex" => $user["place"]
             ]);
-            
         }
 
         private static function initConnection() {

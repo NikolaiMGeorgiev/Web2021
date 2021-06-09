@@ -1,7 +1,68 @@
 function init(){
+    var utlParam = window.location.href.split("?")[1];
+    var roomId = utlParam.substring(utlParam.indexOf('=') + 1);
     document.getElementById("next-bnt").addEventListener("click", function () {
         nextAnimation();
     });
+    document.getElementById("btn-start").addEventListener("click", function() {
+        startEvent(roomId);
+    });
+
+    document.getElementById("btn-queue").addEventListener("click", function() {
+        enterQueue(roomId);
+    });
+
+    renderQueueTable(roomId);
+    
+    var intervalId = window.setInterval(function(){
+        renderQueueTable(roomId);
+      }, 10000);
+}
+
+async function renderQueueTable(roomId) {
+    const response = await fetch("http://localhost/Web2021/endpoints/queue.php?roomId=" + roomId, {
+        method: 'GET'
+    }).then(data => data.json());
+    
+    var queue = document.querySelector("#queue tbody");
+    var tableHTML = "";
+    if (response.length > 0) {
+        for(var i = 0; i < response.length; i++) {
+            tableHTML += 
+                '<tr>' +
+                    '<td>' + (i + 1) + '</td>' +
+                    '<td>' + response[i]['id'] + '</td>' +
+                '</td>';
+        }
+    } else {
+        tableHTML = 
+        '<tr>' +
+            '<td colspan="2">Няма ученици/студенти в опашката.</td>' + 
+        '</tr>';
+    }
+    
+    queue.innerHTML = tableHTML;
+}
+
+async function startEvent(roomId) {
+    const response = fetch("http://localhost/Web2021/endpoints/queue.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: roomId,
+    }).then(data => data.json());
+    
+}
+
+async function enterQueue(roomId){
+    const response = fetch("http://localhost/Web2021/endpoints/students.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: roomId,
+    }).then(data => data.json());
 }
 
 function nextAnimation () {
