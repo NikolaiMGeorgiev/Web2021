@@ -11,6 +11,7 @@
             if (!isset($_GET["roomId"])) {
                 throw new BadRequestException("Room id shoud be provided");
             }
+
             $studentsData = QueueRequestHandler::getStudentsInQueue($_GET["roomId"]);
 
             echo json_encode($studentsData);

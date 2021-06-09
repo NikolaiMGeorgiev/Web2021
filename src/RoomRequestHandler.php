@@ -69,17 +69,54 @@
                 throw new BadRequestException("User id should be provided");
             }
 
+            $userTypeId = $_SESSION["typeId"];
+
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM rooms WHERE userId=:userId");
+            $stmt = $connection->prepare("SELECT * FROM UserTypes WHERE id=:id");
+
             $stmt->execute([
-                "userId" => $id
+                "id" => $userTypeId
             ]);
-            
+
+            $role = $stmt->fetch();
+
             $rooms = [];
 
-            while ($row = $stmt->fetch()) {
-                $rooms[] = new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]);
+            if ($role["code"] == "TEACHER") {
+                $stmt = $connection->prepare("SELECT * FROM rooms WHERE userId=:userId");
+                $stmt->execute([
+                    "userId" => $id
+                ]);
+
+                while ($row = $stmt->fetch()) {
+                    $rooms[] = new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]);
+                }
+
+            } else if ($role["code"] == "STUDENT") {
+                $stmt = $connection->prepare("SELECT * FROM schedule WHERE userId=:userId");
+
+                $stmt->execute([
+                    "userId" => $id
+                ]);
+                
+                $roomsId = [];
+
+                while ($row = $stmt->fetch()) {
+                    $roomsId[] = $row["roomId"];
+                }
+
+                foreach ($roomsId as $roomId) {
+                    $stmt = $connection->prepare("SELECT * FROM rooms WHERE id=:id");
+
+                    $stmt->execute([
+                        "id" => $roomId
+                    ]);
+
+                    $row = $stmt->fetch();
+
+                    $rooms[] = new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]);
+                }
             }
 
             return $rooms;

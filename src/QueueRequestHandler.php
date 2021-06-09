@@ -81,35 +81,35 @@
             }
 
             $connection = self::initConnection();
-<<<<<<< Updated upstream
-=======
-            $stmt = $connection->prepare("SELECT * FROM rooms WHERE id=:roomId");
-            $stmt->execute([
-                "roomId" => $roomId
-            ]);
-            $room = $stmt->fetch();
->>>>>>> Stashed changes
 
             $stmt = $connection->prepare(
                 "SELECT * FROM queues
                  WHERE roomId=:roomId 
                  ORDER BY userIndex ASC"
             );
-<<<<<<< Updated upstream
 
             $stmt->execute([
                 "roomId" => $roomId
             ]);
             
-=======
-            $stmt->execute([
-                "roomId" => $roomId
-            ]);
->>>>>>> Stashed changes
-            $students = [];
+            $studentsId = [];
 
             while ($row = $stmt->fetch()) {
-                $students[] = ["id" => $row["userId"]];
+                $studentsId[] = $row["userId"];
+            }
+
+            $students = [];
+
+            foreach ($studentsId as $studentId) {
+                $stmt = $connection->prepare("SELECT * FROM users WHERE id=:id");
+
+                $stmt->execute([
+                    "id" => $studentId
+                ]);
+
+                $row = $stmt->fetch();
+
+                $students[] = ["id" => $row["id"], "name" => $row["name"]];
             }
 
             return $students;
