@@ -13,9 +13,9 @@
                 throw new BadRequestException("Room id shoud be provided");
             }
 
-            StudentsRequestHandler::getLink($_GET["roomId"], $_SESSION["userId"]);
+            $link = StudentsRequestHandler::getLink($_GET["roomId"], $_SESSION["id"]);
 
-            echo json_encode(["link" => "bbb.fmi.uni-sofia.bg/id=4214"]);
+            echo json_encode(["link" => $link]);
 
             break;
         }

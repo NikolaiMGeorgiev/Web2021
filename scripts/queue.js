@@ -1,40 +1,3 @@
- function init(){
-    var utlParam = window.location.href.split("?")[1];
-    var roomId = utlParam.substring(utlParam.indexOf('=') + 1);
-    var userType = getUserType();
-
-    if (userType === 1) {
-        enterQueue(roomId);
-    } else {
-        initTeacherButtons();
-    }
-
-    getQueueStatus(roomId);
-    renderQueueTable(roomId);
-
-    document.getElementById("bnt-next").addEventListener("click", function () {
-        nextAnimation();
-        finishCurrentMeeting(roomId);
-        startNextMeeting(roomId);
-        getQueueStatus(roomId);
-    });
-
-    document.getElementById("btn-break").addEventListener("click", function() {
-        finishCurrentMeeting(roomId);
-        getQueueStatus(roomId);
-    });
-
-    document.getElementById("btn-start").addEventListener("click", function() {
-        startEvent(roomId);
-        getQueueStatus(roomId);
-    });
-
-    var intervalId = window.setInterval(function(){
-        renderQueueTable(roomId);
-        getQueueStatus(roomId);
-      }, 5000);
-}
-
 async function renderQueueTable(roomId) {
     const response = await fetch("http://localhost/Web2021/endpoints/queue.php?roomId=" + roomId, {
         method: 'GET'
@@ -60,6 +23,31 @@ async function renderQueueTable(roomId) {
     queue.innerHTML = tableHTML;
 }
 
+async function renderScheduleTable(roomId) {
+    const response = await fetch("http://localhost/Web2021/endpoints/schedule.php?roomId=" + roomId, {
+        method: 'GET'
+    }).then(data => data.json());
+    
+    var schedule = document.querySelector("#schedule tbody");
+    var tableHTML = "";
+    if (response.length > 0) {
+        for(var i = 0; i < response.length; i++) {
+            tableHTML += 
+                '<tr>' +
+                    '<td>' + (i + 1) + '</td>' +
+                    '<td>' + response[i]['name'] + '</td>' +
+                '</td>';
+        }
+    } else {
+        tableHTML = 
+        '<tr>' +
+            '<td colspan="2">Няма график.</td>' + 
+        '</tr>';
+    }
+    
+    schedule.innerHTML = tableHTML;
+}
+
 async function startEvent(roomId) {
     const response = await fetch("http://localhost/Web2021/endpoints/queue.php?roomId=" + roomId, {
         method: 'POST',
@@ -75,9 +63,25 @@ async function getQueueStatus(roomId) {
         method: 'GET'
     }).then(data => data.json());
     var statusElement = document.getElementById("status");
+    if (response[0].id === "meeting" && 
+    (statusElement.classList.contains("waiting") || statusElement.classList.contains("finished"))) {
+        nextAnimation();
+    }
     statusElement.textContent = response[0].response;
     statusElement.classList.remove("waiting", "meeting", "finished");
     statusElement.classList.add(response[0].id);
+}
+
+async function getLink(userType, roomId) {
+    if (userType === 1 && !document.getElementById("link_wrapper")) {
+        const response = await fetch("http://localhost/Web2021/endpoints/students.php?roomId=" + roomId, {
+            method: 'GET'
+        }).then(data => data.json());
+        
+        if (response.link) {
+            showLink(response.link);
+        }
+    }
 }
 
 async function finishCurrentMeeting(roomId) {
@@ -105,11 +109,24 @@ async function enterQueue(roomId){
 function initTeacherButtons() {
     var container = document.getElementById("btn-container");
     var buttonsHtml = 
-        '<button id="btn-start" class="gradient-btn">Старт</button>' +
         '<button id="bnt-next" class="gradient-btn-green">Следващ</button>' +
         '<button id="btn-break" class="gradient-btn-yellow">Почивка</button>';
 
     container.innerHTML = buttonsHtml;
+}
+
+function showLink(link) {
+    var container = document.getElementById("progress_container");
+    var linkHTML = 
+        '<div id="link_container">' +
+            '<h2>Твой ред е!</h2>' +
+            '<label for="link">Посетете следния линк:</label>' +
+            '<input id="link" name="link" value="' + link + '" disabled>' +
+        '</div>';
+    var linkContainer = document.createElement("div");
+    linkContainer.setAttribute("id", "link_wrapper");
+    linkContainer.innerHTML = linkHTML;
+    container.append(linkContainer);
 }
 
 function nextAnimation () {
@@ -133,5 +150,3 @@ function nextAnimation () {
     images[1].classList.add("move-img");
     images[2].classList.add("fadeaway-img");
 }
-
-init();

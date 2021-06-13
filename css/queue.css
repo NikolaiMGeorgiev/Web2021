@@ -49,7 +49,7 @@ td {
 .table-container {
     height: 100%;
     margin-top: 32px;
-    margin-bottom: 40px;
+    padding-bottom: 32px;
 }
 
 #page_header {
@@ -60,12 +60,47 @@ header h1 {
     text-align: center;
 }
 
+#link_wrapper {
+    width: 100%;
+    margin: 10px 20px;
+    background: rgb(223, 242, 242);
+    border: 2px solid black;
+    border-radius: 12px;
+}
+
+#link_container {
+    padding: 10px 20px;
+}
+
+#link_container h2 {
+    margin: 0 0 10px 0;
+    color: rgb(6, 126, 75);
+}
+
+#link {
+    width: 100%;
+    display: block;
+    color: rgb(92, 209, 136);
+    background: rgb(246, 255, 255);
+}
 
 #btn-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-evenly;
     padding: 0 40px;
+}
+
+.waiting {
+    color: rgb(172, 150, 12);
+}
+
+.meeting {
+    color: rgb(13, 165, 58);
+}
+
+.finished {
+    color: rgb(204, 6, 6);
 }
 
 #page-content-wrapper {
@@ -113,18 +148,6 @@ header h1 {
     animation-name: move_img;
     animation-duration: 3s;
     animation-fill-mode: forwards;
-}
-
-.waiting {
-    color: rgb(172, 150, 12);
-}
-
-.meeting {
-    color: rgb(13, 165, 58);
-}
-
-.finished {
-    color: rgb(204, 6, 6);
 }
 
 @keyframes move_img {

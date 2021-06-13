@@ -13,7 +13,7 @@
 
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare(["SELECT * FROM schedule WHERE roomId=:roomId ORDER BY place ASC"]);
+            $stmt = $connection->prepare("SELECT * FROM schedule WHERE roomId=:roomId ORDER BY place ASC");
 
             $stmt->execute([
                 "roomId" => $roomId

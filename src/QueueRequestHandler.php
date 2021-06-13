@@ -81,10 +81,6 @@
 
             $room = $stmt->fetch();
 
-            if ($room["userId"] != $_SESSION["id"]) {
-                throw new AuthorizationException();
-            }
-
             $waitingTime = $room["waitingInterval"];
             $meetInterval = $room["meetInterval"];
             $isInMeeting = $room["state"];

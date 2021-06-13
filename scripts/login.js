@@ -4,7 +4,6 @@ function init() {
             event.preventDefault();
 
             if (validateInput()) {
-                console.log("valid");
                 postForm('login');
             } else {
                 event.preventDefault();

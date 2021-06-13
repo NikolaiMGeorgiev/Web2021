@@ -32,10 +32,13 @@
 
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare([
-                "SELECT *
-                FROM queues 
-                WHERE roomId=:roomId AND userId=:userId"
+            $stmt = $connection->prepare(
+                "SELECT * FROM queues WHERE roomId=:roomId AND userId=:userId"
+            );
+
+            $stmt->execute([
+                "roomId" => $roomId,
+                "userId" => $userId
             ]);
 
             $student = $stmt->fetch();
@@ -45,8 +48,10 @@
             }
 
             if ($student["active"]==0) {
-                throw new BadRequestException("There is already student in the room");
+                return "";
             }
+
+            return "bbb.fmi.uni-sofia.bg/id=4214";
         }
 
         public static function addToQueue($userId, $roomId) {

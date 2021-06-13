@@ -5,7 +5,7 @@
 
     switch($_SERVER["REQUEST_METHOD"]) {
         case "GET": {  // get queue state
-            SessionRequestHandler::requireLoggedTeacher();
+            SessionRequestHandler::requireLoggedUser();
 
             if (!isset($_GET["roomId"])) {
                 throw new BadRequestException("Room id shoud be provided");
