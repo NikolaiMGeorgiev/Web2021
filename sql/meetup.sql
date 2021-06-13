@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2021 at 07:55 PM
+-- Generation Time: Jun 13, 2021 at 08:08 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
@@ -71,15 +71,17 @@ CREATE TABLE `rooms` (
   `waitingInterval` int(10) NOT NULL,
   `meetInterval` int(10) NOT NULL,
   `start` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `userId` int(10) NOT NULL
+  `userId` int(10) NOT NULL,
+  `currentTime` timestamp NULL DEFAULT NULL,
+  `state` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `name`, `waitingInterval`, `meetInterval`, `start`, `userId`) VALUES
-(55, 'Web', 2, 15, '2021-06-11 06:15:00', 8);
+INSERT INTO `rooms` (`id`, `name`, `waitingInterval`, `meetInterval`, `start`, `userId`, `currentTime`, `state`) VALUES
+(55, 'Web', 2, 15, '2021-06-13 17:00:37', 8, '2021-06-13 17:00:37', 0);
 
 -- --------------------------------------------------------
 
@@ -245,7 +247,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `queues`
 --
 ALTER TABLE `queues`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `rooms`
