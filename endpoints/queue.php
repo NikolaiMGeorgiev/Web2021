@@ -3,7 +3,6 @@
 
     AppBootStrap::init();
 
-
     switch($_SERVER["REQUEST_METHOD"]) {
         case "GET": {  // get students in queue
             SessionRequestHandler::requireLoggedUser();
@@ -26,6 +25,7 @@
             QueueRequestHandler::startQueue($roomId);
             
             echo json_encode(["success" => true]);
+
             break;
         }
 
