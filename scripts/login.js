@@ -4,6 +4,7 @@ function init() {
             event.preventDefault();
 
             if (validateInput()) {
+                console.log("valid");
                 postForm('login');
             } else {
                 event.preventDefault();
@@ -59,7 +60,7 @@ async function postForm (formType, userTypeId = 0) {
         body: data,
     }).then(data => data.json());
     response = responseJSON.success;
-
+    
     if (!response && !document.getElementById("error_validation")) {
         let inputs = document.getElementsByTagName("input");
         let lastInput = inputs[inputs.length - 1];

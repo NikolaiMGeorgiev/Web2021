@@ -125,15 +125,20 @@ fieldset {
     overflow-y: scroll;
 }
 
-.gradient-btn {
+button {
     font-weight: bold;
-    color: white;
+    color: rgb(255, 255, 255);
     font-size: 0.9rem;
+    padding: 5px 10px;
+    border: 2px solid rgb(43, 59, 74);
+    border-radius: 3px;
+}
+
+.gradient-btn {
     padding: 5px 10px;
     background: rgb(0,53,102);
     background: linear-gradient(45deg, rgba(0,53,102,1) 20%, rgba(65,134,198,1) 50%, rgba(0,53,102,1) 80%);
-    border: 2px solid rgb(43, 59, 74);
-    border-radius: 3px;
+
 }
 
 .gradient-btn:hover {
@@ -143,19 +148,35 @@ fieldset {
 }
 
 .gradient-cancel-btn {
-    font-weight: bold;
-    color: white;
-    font-size: 0.9rem;
-    padding: 5px 10px;
     background: rgb(139,14,14);
     background: linear-gradient(45deg, rgba(139,14,14,1) 0%, rgba(227,93,93,1) 50%, rgba(139,14,14,1) 100%);
-    border: 2px solid rgb(43, 59, 74);
-    border-radius: 3px;
 }
 
 .gradient-cancel-btn:hover {
     background: rgb(193,16,16);
     background: linear-gradient(45deg, rgba(193,16,16,1) 0%, rgba(255,117,117,1) 50%, rgba(193,16,16,1) 100%);
+    border-color: rgb(33, 47, 59);
+}
+
+.gradient-btn-green {
+    background: rgb(6,126,75);
+    background: linear-gradient(45deg, rgba(6,126,75,1) 20%, rgba(80,215,128) 50%, rgba(6,126,75,1) 80%); 
+}
+
+.gradient-btn-green:hover {
+    background: rgb(11, 160, 98);
+    background: linear-gradient(45deg, rgba(11, 160, 98,1) 20%, rgb(105, 226, 147) 50%, rgba(11, 160, 98,1) 80%); 
+    border-color: rgb(33, 47, 59);
+}
+
+.gradient-btn-yellow {
+    background: rgb(153, 133, 1);
+    background: linear-gradient(45deg, rgb(153, 133, 1) 0%, rgb(224, 202, 56) 50%, rgb(153, 133, 1) 100%);
+}
+
+.gradient-btn-yellow:hover {
+    background: rgb(199, 172, 0);
+    background: linear-gradient(45deg, rgb(199, 172, 0) 0%, rgb(233, 213, 82) 50%, rgb(199, 172, 0) 100%);
     border-color: rgb(33, 47, 59);
 }
 

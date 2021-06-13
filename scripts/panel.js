@@ -1,14 +1,5 @@
-window.onload = async function init() {
-    var userType;
-    const userData = await fetch('http://localhost/Web2021/endpoints/session.php', {
-        method: 'GET'
-    }).then(data => data.json());
-
-    if (userData['fn']) {
-        userType = 1;
-    } else {
-        userType = 2;
-    }
+window.onload = async function() {
+    var userType = await getUserType();
     
     document.getElementById("nav_panel").addEventListener("click", function () {
         window.location.href = "panel.html";
@@ -33,6 +24,18 @@ window.onload = async function init() {
         loadUserInfo(userType);
     }
 };
+
+async function getUserType() {
+    const userData = await fetch('http://localhost/Web2021/endpoints/session.php', {
+        method: 'GET'
+    }).then(data => data.json());
+
+    if (userData['fn']) {
+        return 1;
+    } else {
+        return 2;
+    }
+}
 
 async function loadEvents (userType) {
     var events = await fetch('http://localhost/Web2021/endpoints/room.php', {

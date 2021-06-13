@@ -15,7 +15,6 @@
         }
         case "POST": { // login
             $loginData = json_decode(file_get_contents("php://input"), true);
-
             $user = SessionRequestHandler::login($loginData);
                 
             $_SESSION["logged"] = true;

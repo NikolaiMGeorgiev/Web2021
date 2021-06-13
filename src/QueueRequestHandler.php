@@ -1,5 +1,5 @@
 <?php
-
+    date_default_timezone_set('Europe/Sofia');
     require_once("AppBootStrap.php");
 
     AppBootStrap::init();
@@ -19,10 +19,9 @@
             $stmt->execute([
                 "id" => $roomId
             ]);
-            
             $success = $stmt->fetch();
-            
-            if (!$success) {
+
+            if (!$success && !empty($success)) {
                 throw new BadRequestException("Queue couldn't be started");
             }
         }
@@ -86,22 +85,35 @@
                 throw new AuthorizationException();
             }
 
-            $waitingTime = $room["waitingTime"];
+            $waitingTime = $room["waitingInterval"];
             $meetInterval = $room["meetInterval"];
-            $isWaiting = $room["isWaiting"];
+            $isInMeeting = $room["state"];
             $currentTime = $room["currentTime"];
 
-            if ($isWaiting) {
-                if (strtotime($currentTime) + ($meetInterval*self::secondsInMinute) > strtotime(date('Y-m-d H:i:s')) ) {
-                    return array(["respone" => "Time is over"]);
+            if ($isInMeeting) {
+                if ( (strtotime($currentTime) + ($meetInterval*self::secondsInMinute)) < strtotime(date('Y-m-d H:i:s')) ) {
+                    return array([
+                        "response" => "Времето за среща изтече",
+                        "id" => "finished"
+                    
+                    ]);
                 } else {
-                    return array(["respone" => "Student is in turn"]);
+                    return array([
+                        "response" => "Провежда се среща",
+                        "id" => "meeting"
+                    ]);
                 }
             } else {
-                if (strtotime($currentTime) + ($waitingTime*self::secondsInMinute) > strtotime(date('Y-m-d H:i:s')) ) {
-                    return array(["respone" => "Break is over"]);
+                if ( (strtotime($currentTime) + ($waitingTime*self::secondsInMinute)) < strtotime(date('Y-m-d H:i:s')) ) {
+                    return array([
+                        "response" => "Времето за чакане изтече",
+                        "id" => "finished"
+                    ]);
                 } else {
-                    return array(["respone" => "Coffe break"]);
+                    return array([
+                        "response" => "Изчакване",
+                        "id" => "waiting"
+                    ]);
                 }
             }
         }
@@ -129,7 +141,8 @@
                 if (!$row) {
                     throw new BadRequestException("Empty queue");
                 }
-                $studentId = $stmt->fetch()["userId"];
+
+                $studentId = $row["userId"];
             }
 
             if (!$studentId) {
@@ -151,10 +164,13 @@
                 throw new BadRequestException("Couldn't find student");
             }
 
-            $stmt = $connection->prepare("UPDATE rooms SET isWaiting=:isWaiting, currentTime=now() WHERE roomId=:roomId");
+            $stmt = $connection->prepare(
+                "UPDATE rooms SET state=:isInMeeting, currentTime=now() 
+                WHERE id=:roomId"
+            );
 
             $stmt->execute([
-                "isWaiting" => 1,
+                "isInMeeting" => 1,
                 "roomId" => $roomId
             ]);
         }
@@ -177,16 +193,15 @@
                 throw new NotFoundException();
             }
 
-            $stmt = $connection->preapre("UPDATE rooms 
-                                          SET currentTime=now(), isWaiting=:isWaiting 
-                                          WHERE id=:id");
+            $stmt = $connection->prepare(
+                "UPDATE rooms  SET currentTime=now(), state=:isInMeeting 
+                WHERE id=:id"
+            );
 
             $success = $stmt->execute([
-                "isWaiting" => 0,
+                "isInMeeting" => 0,
                 "id" => $roomId
             ]);
-            
-
         }
 
         private static function initConnection() {
