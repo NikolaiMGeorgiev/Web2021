@@ -22,8 +22,8 @@
             
             $user = $stmt->fetch();
 
-            if (!$user || !password_verify($loginData["password"], $user["password"])) {
-                throw new BadRequestException("Incorrect data");
+            if (empty($user) || !password_verify($loginData["password"], $user["password"])) {
+                throw new BadRequestException("Incorrect login data");
             }
 
             return $user;

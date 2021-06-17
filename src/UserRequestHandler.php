@@ -6,7 +6,7 @@
 
     class UserRequestHandler {
 
-        public static function createUser(array $userInfo) {
+        public static function createUser($userInfo) {
             if (!$userInfo) {
                 throw new BadRequestException("User data should be provided");
             }
@@ -23,16 +23,22 @@
                 "userTypeId" => $userInfo["userTypeId"]
             ]);
 
+            if (!$success) {
+                throw new BadRequestException("Invalid operation");
+            }
+
             $userId = $connection->lastInsertId();
     
             $stmt = $connection->prepare("SELECT * FROM usertypes WHERE id=:userTypeId");
-            $success = $stmt->execute([
+            $stmt->execute([
                 "userTypeId" => $userInfo["userTypeId"]
             ]);
 
-            if ($stmt->fetch(PDO::FETCH_ASSOC)["code"] == "STUDENT") {
+            $row = $stmt->fetch();
+            
+            if ($row["code"] == "STUDENT") {
                 $stmt = $connection->prepare("INSERT INTO students_details (fn,year,degree,userId) VALUES (:fn,:year,:degree,:userId)");
-                $success = $stmt->execute([
+                $stmt->execute([
                     "fn" => $userInfo["fn"],
                     "year" => $userInfo["fn"],
                     "degree" => $userInfo["degree"],
@@ -43,11 +49,8 @@
             return $userId;
         }
 
-        public static function getUserById(int $id) {
-            if (!$id) {
-                throw new BadRequestException("User id should be provided");
-            }
-
+        public static function getUserById($id) {
+            
             $connection = self::initConnection();
 
             $stmt = $connection->prepare("SELECT * FROM users WHERE id=:id");
@@ -58,26 +61,31 @@
 
             $user = $stmt->fetch();
 
-            if (!$user) {
+            if (empty($user)) {
                 throw new NotFoundException();
             }
 
             $stmt = $connection->prepare("SELECT * FROM usertypes WHERE id=:userTypeId");
-            $success = $stmt->execute([
+            $stmt->execute([
                 "userTypeId" => $user["userTypeId"]
             ]);
 
-            if ($stmt->fetch(PDO::FETCH_ASSOC)["code"] == "STUDENT") {
+            $row = $stmt->fetch();
+
+            $returnUser = null;
+
+            if ($row["code"] == "STUDENT") {
                 $stmt = $connection->prepare("SELECT * FROM students_details WHERE userId=:userId");
                 $stmt->execute([
                     "userId" => $user["id"]
                 ]);
 
                 $student = $stmt->fetch();
-                
-                if (!$student) {
+
+                if (empty($student)) {
                     throw new NotFoundException();
                 }
+                
                 $returnUser = new Student($user["name"], $user["email"], $user["id"], $student["fn"], $student["year"], $student["degree"]);
             } else {
                 $returnUser = new User($user["name"], $user["email"], $user["id"]);

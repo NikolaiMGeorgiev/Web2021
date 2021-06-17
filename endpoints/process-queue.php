@@ -17,18 +17,6 @@
 
             break;
         }
-
-        case "POST": { 
-            break;
-        }
-
-        case "PUT" : {
-            break;
-        }
-
-        case "DELETE" : {
-
-        }
     }
 
 ?>

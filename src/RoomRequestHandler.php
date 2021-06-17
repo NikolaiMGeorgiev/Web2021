@@ -15,7 +15,7 @@
 
             $stmt = $connection->prepare("INSERT INTO rooms (name, waitingInterval, meetInterval,
                 userId, start) VALUES (:name, :waitingInterval, :meetInterval, :userId, :start)");
-            $success = $stmt->execute([
+            $stmt->execute([
                 "name" => $roomData["name"],
                 "waitingInterval" => $roomData["waitingInterval"],
                 "meetInterval" => $roomData["meetInterval"],
@@ -45,7 +45,7 @@
             $list = substr_replace($list, "", -1);
       
             $stmt = $connection->prepare("SELECT * FROM users WHERE email IN ( " . $list . " )");
-            $success = $stmt->execute(); 
+            $stmt->execute(); 
             
             while ($row = $stmt->fetch()) {
                 $studentsData[$row["email"]]["id"] = $row["id"];

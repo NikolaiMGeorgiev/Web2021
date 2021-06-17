@@ -20,7 +20,7 @@
             $newPersonData = json_decode(file_get_contents("php://input"), true);
 
             $userId = UserRequestHandler::createUser($newPersonData);
-            
+
             echo json_encode(["success" => true]);
             break;
         }

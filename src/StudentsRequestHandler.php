@@ -56,7 +56,7 @@
 
         public static function addToQueue($userId, $roomId) {
             if (!$userId || !$roomId) {
-                throw new BadRequestException("User and room id should be provided");
+                throw new BadRequestException("User id and room id should be provided");
             }
 
             $connection = self::initConnection();
@@ -73,7 +73,7 @@
             $user = $stmt->fetch();
 
             if (!$user) {
-                throw new AuthorizationException("Student doesn't belong to this room");
+                throw new AuthorizationException("Student doesn't belong to that room");
             }
 
             $stmt = $connection->prepare(

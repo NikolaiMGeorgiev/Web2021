@@ -6,7 +6,6 @@
 
     switch($_SERVER["REQUEST_METHOD"]) {
         case "GET": { // get link
-            
             SessionRequestHandler::requireLoggedUser();
             
             if (!isset($_GET["roomId"])) {
@@ -29,14 +28,6 @@
             echo json_encode(["success" => true]);
 
             break;
-        }
-
-        case "PUT" : {
-            break;
-        }
-
-        case "DELETE" : {
-
         }
     }
 ?>

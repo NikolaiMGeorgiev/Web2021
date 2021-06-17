@@ -1,11 +1,10 @@
 <?php
-
     require_once("../src/AppBootStrap.php");
 
     AppBootStrap::init();
 
     switch($_SERVER["REQUEST_METHOD"]) {
-        case "GET": { // get logged user
+        case "GET": { // get logged user info
             SessionRequestHandler::requireLoggedUser();
 
             $userData = UserRequestHandler::getUserById($_SESSION["id"]);
@@ -21,11 +20,8 @@
             $_SESSION["id"] = $user['id'];
             $_SESSION["typeId"] = $user['userTypeId'];
             
-            //header('Location: http://localhost/Web2021/panel.html');
             echo json_encode(["success" => true]);
-            break;
-        }
-        case "PUT" : {
+
             break;
         }
         case "DELETE" : { // logout

@@ -134,7 +134,7 @@
                 
                 $row = $stmt->fetch();
 
-                if (!$row) {
+                if (empty($row)) {
                     throw new BadRequestException("Empty queue");
                 }
 
@@ -180,12 +180,12 @@
 
             $stmt = $connection->prepare("DELETE FROM queues WHERE roomId=:roomId and active=:active");
 
-            $success = $stmt->execute([
+            $stmt->execute([
                 "roomId" => $roomId,
                 "active" => 1
             ]);
 
-            if (!$success) {
+            if ($stmt->rowCount() == 0) {
                 throw new NotFoundException();
             }
 

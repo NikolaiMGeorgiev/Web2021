@@ -5,7 +5,7 @@
 
 
     switch($_SERVER["REQUEST_METHOD"]) {
-        case "GET": {  // get rooms by user 
+        case "GET": {  // get user's rooms 
             SessionRequestHandler::requireLoggedUser();
 
             $roomsData = RoomRequestHandler::getUserRooms($_SESSION["id"]);
@@ -22,13 +22,6 @@
             
             echo json_encode(["success" => true]);
             break;
-        }
-        case "PUT" : {
-            
-            break;
-        }
-        case "DELETE" : {
-
         }
     }
 
