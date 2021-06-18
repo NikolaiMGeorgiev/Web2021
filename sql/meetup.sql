@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 13, 2021 at 08:08 PM
+-- Generation Time: Jun 18, 2021 at 12:17 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
@@ -31,7 +31,8 @@ CREATE TABLE `comments` (
   `id` int(10) NOT NULL,
   `roomId` int(10) NOT NULL,
   `userId` int(10) NOT NULL,
-  `content` varchar(500) NOT NULL
+  `content` varchar(500) NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -53,11 +54,8 @@ CREATE TABLE `queues` (
 --
 
 INSERT INTO `queues` (`id`, `userIndex`, `userId`, `roomId`, `active`) VALUES
-(1, 1, 15, 55, 0),
-(2, 3, 18, 55, 0),
-(3, 2, 19, 55, 0),
-(4, 6, 17, 55, 0),
-(5, 5, 20, 55, 0);
+(26, 3, 17, 55, 0),
+(27, 2, 20, 55, 0);
 
 -- --------------------------------------------------------
 
@@ -81,7 +79,7 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`id`, `name`, `waitingInterval`, `meetInterval`, `start`, `userId`, `currentTime`, `state`) VALUES
-(55, 'Web', 2, 15, '2021-06-13 17:00:37', 8, '2021-06-13 17:00:37', 0);
+(55, 'Web', 2, 15, '2021-06-17 17:32:21', 8, '2021-06-17 17:32:21', 0);
 
 -- --------------------------------------------------------
 
@@ -225,6 +223,7 @@ ALTER TABLE `students_details`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
   ADD KEY `userTypeId` (`userTypeId`);
 
 --
@@ -247,7 +246,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `queues`
 --
 ALTER TABLE `queues`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `rooms`

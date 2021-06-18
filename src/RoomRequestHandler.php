@@ -81,7 +81,7 @@
 
             $role = $stmt->fetch();
 
-            $rooms = [];
+            $response = [];
 
             if ($role["code"] == "TEACHER") {
                 $stmt = $connection->prepare("SELECT * FROM rooms WHERE userId=:userId");
@@ -90,7 +90,7 @@
                 ]);
 
                 while ($row = $stmt->fetch()) {
-                    $rooms[] = new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]);
+                    $response[] = new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]);
                 }
 
             } else if ($role["code"] == "STUDENT") {
@@ -106,20 +106,35 @@
                     $roomsId[] = $row["roomId"];
                 }
 
+                $list = "";
+
                 foreach ($roomsId as $roomId) {
-                    $stmt = $connection->prepare("SELECT * FROM rooms WHERE id=:id");
+                    $list = $list . "'". $roomId . "'" . ",";
+                }
+                $list = substr_replace($list, "", -1);
+                
+                $stmt = $connection->prepare("SELECT * FROM queues WHERE userId=:userId AND roomId IN ( " . $list . " )");
+                $stmt->execute([
+                    "userId" => $id
+                ]); 
 
-                    $stmt->execute([
-                        "id" => $roomId
-                    ]);
+                $indexes = [];
+                while ($row = $stmt->fetch()) {
+                    $indexes[$row["roomId"]] = $row["userIndex"];
+                }
 
-                    $row = $stmt->fetch();
+                $stmt = $connection->prepare("SELECT * FROM rooms WHERE roomId IN ( " . $list . " )");
+                $stmt->execute();
 
-                    $rooms[] = new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]);
+                while ($row = $stmt->fetch()) {
+                    $response[] = [
+                        "room" => new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]),
+                        "userIndex" => $indexes[$row["id"]]
+                    ];
                 }
             }
 
-            return $rooms;
+            return $response;
         }
 
         private static function initConnection() {

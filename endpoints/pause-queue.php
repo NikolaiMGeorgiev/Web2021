@@ -4,7 +4,7 @@
     AppBootStrap::init();
 
     switch($_SERVER["REQUEST_METHOD"]) {
-        case "GET": {  // get next student in queue
+        case "GET": {  // stop meeting
             SessionRequestHandler::requireLoggedTeacher();
 
             if (!isset($_GET["roomId"])) {
