@@ -26,7 +26,7 @@
                 throw new BadRequestException("Incorrect login data");
             }
 
-            return new User($user["name"], $user["email"], $user["id"]);
+            return $user;
         }
 
         public static function requireLoggedUser() {
