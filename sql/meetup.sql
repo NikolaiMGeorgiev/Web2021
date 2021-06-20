@@ -71,7 +71,8 @@ CREATE TABLE `rooms` (
   `start` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `userId` int(10) NOT NULL,
   `currentTime` timestamp NULL DEFAULT NULL,
-  `state` int(1) NOT NULL DEFAULT 0
+  `state` int(1) NOT NULL DEFAULT 0,
+  `activated` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
