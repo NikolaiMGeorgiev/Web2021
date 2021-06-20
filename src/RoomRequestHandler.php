@@ -94,42 +94,22 @@
                 }
 
             } else if ($role["code"] == "STUDENT") {
-                $stmt = $connection->prepare("SELECT * FROM schedule WHERE userId=:userId");
+                $stmt = $connection->prepare(
+                    "SELECT *
+                    FROM schedule JOIN rooms ON schedule.roomId = rooms.id
+                    JOIN users ON rooms.userId = users.id
+                    WHERE schedule.userId=:userId"
+                );
 
                 $stmt->execute([
                     "userId" => $id
                 ]);
                 
-                $roomsId = [];
-
-                while ($row = $stmt->fetch()) {
-                    $roomsId[] = $row["roomId"];
-                }
-
-                $list = "";
-
-                foreach ($roomsId as $roomId) {
-                    $list = $list . "'". $roomId . "'" . ",";
-                }
-                $list = substr_replace($list, "", -1);
-                
-                $stmt = $connection->prepare("SELECT * FROM queues WHERE userId=:userId AND roomId IN ( " . $list . " )");
-                $stmt->execute([
-                    "userId" => $id
-                ]); 
-
-                $indexes = [];
-                while ($row = $stmt->fetch()) {
-                    $indexes[$row["roomId"]] = $row["userIndex"];
-                }
-
-                $stmt = $connection->prepare("SELECT * FROM rooms WHERE roomId IN ( " . $list . " )");
-                $stmt->execute();
-
                 while ($row = $stmt->fetch()) {
                     $response[] = [
-                        "room" => new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]),
-                        "userIndex" => $indexes[$row["id"]]
+                        "room" => new Room($row["rooms.id"], $row["rooms.name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]),
+                        "teacher" => new User($row["users.name"], $row["users.email"], $row["users.id"]),
+                        "place" => $row["place"]
                     ];
                 }
             }
