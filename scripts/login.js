@@ -37,6 +37,8 @@ function init() {
 
     if (document.getElementById("register_teacher_form")) {
         document.getElementById("register_teacher_form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
             if (validateEmptyFields() && validateInput()) {
                 postForm('register', 2);
             } else {

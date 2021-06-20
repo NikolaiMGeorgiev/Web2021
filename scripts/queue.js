@@ -2,7 +2,6 @@ async function renderQueueTable(roomId, userType) {
     const response = await fetch("http://localhost/Web2021/endpoints/queue.php?roomId=" + roomId, {
         method: 'GET'
     }).then(data => data.json());
-    console.log(response);
 
     var queue = document.querySelector("#queue tbody");
     var tableHTML = "";

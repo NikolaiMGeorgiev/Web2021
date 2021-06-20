@@ -61,19 +61,19 @@ async function initQueuePage(userType) {
     } else {
         initTeacherButtons();
         await initActivationButton(roomId);
-        document.getElementById("bnt-next").addEventListener("click", function () {
+        document.getElementById("bnt-next").addEventListener("click", async function () {
             if (document.querySelectorAll("#queue tbody tr:not(#empty_row)").length) {
                 nextAnimation();
-                finishCurrentMeeting(roomId);
-                startNextMeeting(roomId);
-                refreshQueueStatus(roomId, userType);
+                await finishCurrentMeeting(roomId);
+                await startNextMeeting(roomId);
+                await refreshQueueStatus(roomId, userType);
             }
         });
     
-        document.getElementById("btn-break").addEventListener("click", function() {
+        document.getElementById("btn-break").addEventListener("click", async function() {
             if (document.querySelectorAll("#queue tbody tr:not(#empty_row)").length) {
-                finishCurrentMeeting(roomId);
-                refreshQueueStatus(roomId, userType);
+                await finishCurrentMeeting(roomId);
+                await refreshQueueStatus(roomId, userType);
             }
         });
     }
