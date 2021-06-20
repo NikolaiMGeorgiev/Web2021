@@ -34,7 +34,8 @@
             $connection = self::initConnection();
 
             $stmt = $connection->prepare(
-                "SELECT * FROM queues
+                "SELECT * 
+                 FROM queues JOIN users ON queues.userId=users.Id
                  WHERE roomId=:roomId 
                  ORDER BY userIndex ASC"
             );
@@ -43,28 +44,14 @@
                 "roomId" => $roomId
             ]);
             
-            $studentsId = [];
+            $students = [];
 
             $activeId = -1;
             while ($row = $stmt->fetch()) {
-                $studentsId[] = $row["userId"];
-                if ($row["active"] == 1) {
+                $students[] = ["id" => $row["users.id"], "name" => $row["users.name"]];
+                if ($row["queues.active"] == 1) {
                     $activeId = $row["userId"];
                 }
-            }
-
-            $students = [];
-
-            foreach ($studentsId as $studentId) {
-                $stmt = $connection->prepare("SELECT * FROM users WHERE id=:id");
-
-                $stmt->execute([
-                    "id" => $studentId
-                ]);
-
-                $row = $stmt->fetch();
-
-                $students[] = ["id" => $row["id"], "name" => $row["name"]];
             }
 
             return [
