@@ -21,26 +21,26 @@
             <div class="main-header-item" id="profile_header_container">
                 <a id="sign_in" class="no-style-a" href="login.html">Вход</a>
                 <a id="register"  class="no-style-a" href="register.html">Регистрация</a>
+                <img id="profile_icon" class="button-icon" src="img/icons/panel.png" alt="Икона на потребителки профил">
             </div>
         </header>
-        <nav>
-            <div id="nav_top_bar"></div>
-            <div id="nav_panel" class="nav-element">
-                <img src="img/icons/calendar.png" alt="">
-                Събития
-            </div>
-            <div id="nav_profile" class="nav-element">
-                <img src="img/icons/account.png" alt="">
-                Профил
-            </div>
-            <div id="nav_exit" class="nav-element">
-                <img src="img/icons/exit.png" alt="">
-                Изход
-            </div>
-        </nav>
-        <main class="centered-column">
+        <main id="queue-main">
+            <section id="comments">
+                <header id="comments_header">
+                    <h2>Коментари</h2>
+                </header>
+                <div id="commnets-wrapper" class="scrollable">
+                    
+                </div>
+                <form id="comment_form">
+                    <textarea name="comment_add" id="comment_add" placeholder="Напишете коментар тук"></textarea>
+                    <button type="submit" id="btn_comment">
+                        <img src="img/icons/send.png" alt="">
+                    </button>
+                </form>
+            </section>
             <div id="page-content-wrapper">
-                <header id="page_header">
+                <header id="page_header" class="queue-header">
                     <h1>АСИ</h1>
                 </header>
                 <section id="contnet_container">

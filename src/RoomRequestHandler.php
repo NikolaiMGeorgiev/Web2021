@@ -73,7 +73,7 @@
 
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM UserTypes WHERE id=:id");
+            $stmt = $connection->prepare("SELECT * FROM usertypes WHERE id=:id");
 
             $stmt->execute([
                 "id" => $userTypeId
@@ -123,8 +123,10 @@
                     $indexes[$row["roomId"]] = $row["userIndex"];
                 }
 
-                $stmt = $connection->prepare("SELECT * FROM rooms WHERE roomId IN ( " . $list . " )");
+                $stmt = $connection->prepare("SELECT * FROM rooms WHERE id IN ( " . $list . " )");
                 $stmt->execute();
+                
+                $response = [];
 
                 while ($row = $stmt->fetch()) {
                     $response[] = [

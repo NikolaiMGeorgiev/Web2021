@@ -46,6 +46,7 @@ input {
     align-items: center;
     justify-content: center;
     margin-right: 20px;
+    overflow: scroll;
 }
 
 #room-btn-container {

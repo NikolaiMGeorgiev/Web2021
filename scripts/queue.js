@@ -120,7 +120,7 @@ function showLink(link) {
     var linkHTML = 
         '<div id="link_container">' +
             '<h2>Твой ред е!</h2>' +
-            '<label for="link">Посетете следния линк:</label>' +
+            '<label for="link">Посети следния линк:</label>' +
             '<input id="link" name="link" value="' + link + '" disabled>' +
         '</div>';
     var linkContainer = document.createElement("div");
@@ -149,4 +149,47 @@ function nextAnimation () {
     images[1].offsetHeight;
     images[1].classList.add("move-img");
     images[2].classList.add("fadeaway-img");
+}
+
+async function addComment(roomId) {
+    const data = {
+        "content": document.getElementById("comment_add").value,
+        "roomId": roomId
+    }
+    const response = fetch("http://localhost/Web2021/endpoints/comments.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    }).then(data => data.json());
+
+    document.getElementById("comment_add").value = "";
+}
+
+async function renderComments(roomId) {
+    const response = await fetch("http://localhost/Web2021/endpoints/comments.php?roomId=" + roomId, {
+        method: 'GET'
+    }).then(data => data.json());
+    const commnetsCount = document.getElementsByClassName("comment").length;
+
+    if (commnetsCount < response.length) {
+        for (var i = commnetsCount; i < response.length; i++) {
+            var commentNode = document.createElement("article");
+            commentNode.classList.add("comment");
+            commentNode.innerHTML = getCommentHTML(response[i]);
+            document.getElementById("commnets-wrapper").appendChild(commentNode);
+        }
+        var wrapper = document.getElementById("commnets-wrapper")
+        wrapper.scrollTop = wrapper.scrollHeight;
+    }
+
+}
+
+function getCommentHTML(commentData) {
+    return '<header class="comment-header">' +
+            '<h3>' + commentData.user + '</h3>' +
+            '<h3>' + commentData.comment['createdAt'].split(" ")[1].substring(0, 5) + '</h3>' +
+        '</header>' +
+        '<p class="comment-data">' + commentData.comment.content + '</p>';
 }

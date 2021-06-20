@@ -185,10 +185,6 @@
                 "active" => 1
             ]);
 
-            if ($stmt->rowCount() == 0) {
-                throw new NotFoundException();
-            }
-
             $stmt = $connection->prepare(
                 "UPDATE rooms  SET currentTime=now(), state=:isInMeeting 
                 WHERE id=:id"

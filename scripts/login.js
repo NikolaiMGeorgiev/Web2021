@@ -1,6 +1,6 @@
 function init() {
-    if (document.getElementById("login-btn")) {
-        document.getElementById("login-btn").addEventListener("click", function (event) {
+    if (document.getElementById("login_form")) {
+        document.getElementById("login_form").addEventListener("submit", function (event) {
             event.preventDefault();
 
             if (validateInput()) {
@@ -67,8 +67,9 @@ async function postForm (formType, userTypeId = 0) {
         error.classList.add("error_field");
         error.setAttribute("id", "error_validation");
         error.textContent = "Невалидни входни данни";
-        
         lastInput.parentNode.insertBefore(error, lastInput.nextSibling);
+    } else {
+        window.location.href = formType === "register" ? "register_success.html" : "panel.html"
     }
 }
 
