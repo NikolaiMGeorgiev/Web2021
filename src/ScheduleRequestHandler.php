@@ -13,30 +13,18 @@
 
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM schedule WHERE roomId=:roomId ORDER BY place ASC");
+            $stmt = $connection->prepare("SELECT * 
+                                          FROM schedule JOIN users ON schedule.userId=users.id
+                                          WHERE roomId=:roomId ORDER BY place ASC");
 
             $stmt->execute([
                 "roomId" => $roomId
             ]);
 
-            $studentsId = [];
-
-            while ($row = $stmt->fetch()) {
-                $studentsId[] = $row["userId"];
-            }
-
             $schedule = [];
 
-            foreach ($studentsId as $studentId) {
-                $stmt = $connection->prepare("SELECT * FROM users WHERE id=:id");
-
-                $stmt->execute([
-                    "id" => $studentId
-                ]);
-
-                $row = $stmt->fetch();
-
-                $schedule[] = ["id" => $row["id"], "name" => $row["name"]];
+            while ($row = $stmt->fetch()) {
+                $schedule[] = ["id" => $row["users.id"], "name" => $row["users.name"]];
             }
 
             return $schedule;
