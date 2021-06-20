@@ -13,7 +13,7 @@
 
             $connection = self::initConnection();
             
-            $stmt = $connection->prepare("SELECT * FROM comments WHERE roomId=:roomId ORDER BY createdAt DESC");
+            $stmt = $connection->prepare("SELECT * FROM comments WHERE roomId=:roomId ORDER BY createdAt ASC");
 
             $stmt->execute([
                 "roomId" => $roomId
@@ -34,7 +34,7 @@
 
                 $comments[] = [
                     "comment" => $comment,
-                    "user" => $user
+                    "user" => $userRow["name"]
                 ];
             }
 

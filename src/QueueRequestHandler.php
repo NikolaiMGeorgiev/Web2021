@@ -45,8 +45,12 @@
             
             $studentsId = [];
 
+            $activeId = -1;
             while ($row = $stmt->fetch()) {
                 $studentsId[] = $row["userId"];
+                if ($row["active"] == 1) {
+                    $activeId = $row["userId"];
+                }
             }
 
             $students = [];
@@ -63,7 +67,10 @@
                 $students[] = ["id" => $row["id"], "name" => $row["name"]];
             }
 
-            return $students;
+            return [
+                "students" => $students,
+                "activeId" => $activeId
+            ];
         }
 
         public static function refreshQueue($roomId) {
@@ -184,10 +191,6 @@
                 "roomId" => $roomId,
                 "active" => 1
             ]);
-
-            if ($stmt->rowCount() == 0) {
-                throw new NotFoundException();
-            }
 
             $stmt = $connection->prepare(
                 "UPDATE rooms  SET currentTime=now(), state=:isInMeeting 

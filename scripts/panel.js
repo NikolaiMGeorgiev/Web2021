@@ -1,15 +1,3 @@
-async function getUserType() {
-    const userData = await fetch('http://localhost/Web2021/endpoints/session.php', {
-        method: 'GET'
-    }).then(data => data.json());
-
-    if (userData['fn']) {
-        return 1;
-    } else {
-        return 2;
-    }
-}
-
 async function loadEvents (userType) {
     var events = await fetch('http://localhost/Web2021/endpoints/room.php', {
         method: 'GET'
@@ -43,15 +31,15 @@ async function loadEvents (userType) {
 }
 
 function getEventHTML (userType, event) {
-    var startData = event["start"].split(" ");
+    var startData = userType == 2 ? event["start"].split(" ") : event.room["start"].split(" ");
     var date = startData[0].split("-");
     var time = startData[1].split(":");
     var start = date[2] + "." + date[1] + "." + date[0] + " в " + time[0] + ":" + time[1] + "ч.";
     if (userType === 1) {
         var eventHTML =
-            '<div class="event" id="'+  event['id'] + '">' +
+            '<div class="event" id="'+  event.room['id'] + '">' +
                 '<header>' +
-                    '<h2 class="name" class="bold">' + event["name"] + '</h2>' +
+                    '<h2 class="name" class="bold">' + event.room["name"] + '</h2>' +
                     '<h3 class="date">' + start + '</h3>' +
                 '</header>' +
                 '<article class="event-info-container one-row">' +
@@ -92,17 +80,6 @@ function getEventHTML (userType, event) {
     return eventHTML;
 }
 
-function addCreateEventButton () {
-    var topBar = document.getElementById("nav_top_bar");
-    var buttonContainer = document.createElement("div");
-    buttonContainer.classList.add("nav-element");
-    buttonContainer.setAttribute("id", "nav_new_room");
-    buttonContainer.innerHTML = 
-        '<img src="img/icons/add.png" alt="panel.html">' +
-        'Нова стая';
-    topBar.parentNode.insertBefore(buttonContainer, topBar.nextSibling);
-}
-
 async function loadUserInfo (userType) {
     const userData = await fetch('http://localhost/Web2021/endpoints/session.php', {
         method: 'GET'
@@ -130,14 +107,4 @@ function getUserHTML (userType, userData) {
     }
 
     return userHTML;
-}
-
-async function logout () {
-    const response = await fetch('http://localhost/Web2021/endpoints/session.php', {
-        method: 'DELETE'
-    }).then(data => data.json());
-
-    if(response.success) {
-        window.location.href = "index.html";
-    }
 }

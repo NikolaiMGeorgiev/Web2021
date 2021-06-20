@@ -7,7 +7,8 @@ body {
 }
 
 main {
-    padding: 64px 20px 20px 20px;
+    display: grid;
+    grid-template-columns: 240px 4fr;
 }
 
 caption {
@@ -33,6 +34,73 @@ th {
 
 td {
     background: rgb(224, 248, 244);
+}
+
+#queue tr:hover td {
+    cursor: pointer;
+    background: rgb(157, 235, 187);
+}
+
+#comments {
+    display: grid;
+    grid-template-rows: 42px 6fr 1fr;
+    overflow: hidden;
+    margin-right: 20px;
+    border-right: 2px solid black;
+}
+
+#comments_header {
+    display: flex;
+    align-items: center;
+    background: rgb(0, 18, 51);
+    color: rgb(240, 240, 240);
+}
+
+#comments_header h2 {
+    padding-left: 10px;
+}
+
+#commnets-wrapper {
+    padding: 10px;
+}
+
+#comment_form {
+    display: grid;
+    grid-template-columns: 1fr 32px;
+}
+
+.comment {
+    margin-bottom: 20px;
+    background: rgb(206, 224, 224);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-data {
+    margin: 0;
+    padding: 5px;
+    font-size: 0.9rem;
+    background: rgb(223, 242, 242);
+    border: 2px solid rgb(138, 181, 181);
+    border-radius: 4px;
+}
+
+.comment-header h3 {
+    margin: 0 0 5px 0;
+    font-size: 0.7rem;
+    color: rgb(49, 49, 49);
+}
+
+#btn_comment {
+    padding: 0;
+    background: rgb(0, 53, 102);
+}
+
+#btn_comment:hover {
+    background: rgb(22, 99, 172);
 }
 
 .table-header {
@@ -80,7 +148,7 @@ header h1 {
 #link {
     width: 100%;
     display: block;
-    color: rgb(92, 209, 136);
+    color: rgb(13, 165, 58);
     background: rgb(246, 255, 255);
 }
 
@@ -103,11 +171,17 @@ header h1 {
     color: rgb(204, 6, 6);
 }
 
+.active td{
+    background: rgb(13, 165, 58);
+}
+
 #page-content-wrapper {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
+    padding: 0 20px 20px 0px;
+    overflow: hidden;
 }
 
 #contnet_container {

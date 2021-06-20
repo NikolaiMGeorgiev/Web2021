@@ -73,7 +73,7 @@
 
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM UserTypes WHERE id=:id");
+            $stmt = $connection->prepare("SELECT * FROM usertypes WHERE id=:id");
 
             $stmt->execute([
                 "id" => $userTypeId
@@ -113,7 +113,7 @@
                     ];
                 }
             }
-
+            
             return $response;
         }
 

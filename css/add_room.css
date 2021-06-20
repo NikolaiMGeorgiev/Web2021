@@ -41,11 +41,13 @@ input {
 }
 
 #information {
+    min-width: 220px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-right: 20px;
+    overflow: scroll;
 }
 
 #room-btn-container {
@@ -53,6 +55,13 @@ input {
     justify-content: space-evenly;
     margin-top: 10px;
     padding: 0;
+}
+
+.add-btn {
+    background: rgb(11, 160, 98);
+}
+.remove-btn{
+    background: rgb(193,16,16);
 }
 
 fieldset {

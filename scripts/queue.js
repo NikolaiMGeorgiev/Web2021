@@ -1,26 +1,39 @@
-async function renderQueueTable(roomId) {
+async function renderQueueTable(roomId, userType) {
     const response = await fetch("http://localhost/Web2021/endpoints/queue.php?roomId=" + roomId, {
         method: 'GET'
     }).then(data => data.json());
     
     var queue = document.querySelector("#queue tbody");
     var tableHTML = "";
-    if (response.length > 0) {
-        for(var i = 0; i < response.length; i++) {
+
+    if (response['students'].length > 0) {
+        for(var i = 0; i < response['students'].length; i++) {
+            var isActive = response['students'][i]['id'] === response['activeId'];
             tableHTML += 
-                '<tr>' +
+                '<tr id="' + response['students'][i]['id'] + '"' + (isActive ? 'class="active"' : '') + '>' +
                     '<td>' + (i + 1) + '</td>' +
-                    '<td>' + response[i]['name'] + '</td>' +
+                    '<td>' + response['students'][i]['name'] + '</td>' +
                 '</td>';
         }
     } else {
         tableHTML = 
-        '<tr>' +
+        '<tr id="empty_row">' +
             '<td colspan="2">Няма студенти в опашката.</td>' + 
         '</tr>';
     }
     
     queue.innerHTML = tableHTML;
+
+    if(userType === 2) {
+        document.querySelectorAll("#queue tbody tr").forEach(function(element) {
+            if (element.getAttribute("id") != "empty_row") {
+                element.addEventListener("click", function () {
+                    var studentId = element.getAttribute("id");
+                    selectNextMeeting(roomId, studentId);
+                });
+            }
+        });
+    }
 }
 
 async function renderScheduleTable(roomId) {
@@ -106,6 +119,13 @@ async function enterQueue(roomId){
     }).then(data => data.json());
 }
 
+async function selectNextMeeting(roomId, studentId) {
+    const response = await fetch(
+    "http://localhost/Web2021/endpoints/process-queue.php?roomId=" + roomId + "&studentId=" + studentId, {
+        method: 'GET'
+    }).then(data => data.json()); 
+}
+
 function initTeacherButtons() {
     var container = document.getElementById("btn-container");
     var buttonsHtml = 
@@ -120,7 +140,7 @@ function showLink(link) {
     var linkHTML = 
         '<div id="link_container">' +
             '<h2>Твой ред е!</h2>' +
-            '<label for="link">Посетете следния линк:</label>' +
+            '<label for="link">Посети следния линк:</label>' +
             '<input id="link" name="link" value="' + link + '" disabled>' +
         '</div>';
     var linkContainer = document.createElement("div");
@@ -149,4 +169,47 @@ function nextAnimation () {
     images[1].offsetHeight;
     images[1].classList.add("move-img");
     images[2].classList.add("fadeaway-img");
+}
+
+async function addComment(roomId) {
+    const data = {
+        "content": document.getElementById("comment_add").value,
+        "roomId": roomId
+    }
+    const response = fetch("http://localhost/Web2021/endpoints/comments.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    }).then(data => data.json());
+
+    document.getElementById("comment_add").value = "";
+}
+
+async function renderComments(roomId) {
+    const response = await fetch("http://localhost/Web2021/endpoints/comments.php?roomId=" + roomId, {
+        method: 'GET'
+    }).then(data => data.json());
+    const commnetsCount = document.getElementsByClassName("comment").length;
+
+    if (commnetsCount < response.length) {
+        for (var i = commnetsCount; i < response.length; i++) {
+            var commentNode = document.createElement("article");
+            commentNode.classList.add("comment");
+            commentNode.innerHTML = getCommentHTML(response[i]);
+            document.getElementById("commnets-wrapper").appendChild(commentNode);
+        }
+        var wrapper = document.getElementById("commnets-wrapper")
+        wrapper.scrollTop = wrapper.scrollHeight;
+    }
+
+}
+
+function getCommentHTML(commentData) {
+    return '<header class="comment-header">' +
+            '<h3>' + commentData.user + '</h3>' +
+            '<h3>' + commentData.comment['createdAt'].split(" ")[1].substring(0, 5) + '</h3>' +
+        '</header>' +
+        '<p class="comment-data">' + commentData.comment.content + '</p>';
 }
