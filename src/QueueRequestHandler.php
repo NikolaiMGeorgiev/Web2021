@@ -41,7 +41,7 @@
             $connection = self::initConnection();
 
             $stmt = $connection->prepare(
-                "SELECT * 
+                "SELECT queues.active, queues.userId, users.id, users.name
                  FROM queues JOIN users ON queues.userId=users.Id
                  WHERE roomId=:roomId 
                  ORDER BY userIndex ASC"
@@ -55,16 +55,13 @@
 
             $activeId = -1;
             while ($row = $stmt->fetch()) {
-                $students[] = ["id" => $row["users.id"], "name" => $row["users.name"]];
-                if ($row["queues.active"] == 1) {
+                $students[] = ["id" => $row["id"], "name" => $row["name"]];
+                if ($row["active"] == 1) {
                     $activeId = $row["userId"];
                 }
             }
 
-            return [
-                "students" => $students,
-                "activeId" => $activeId
-            ];
+            return [ "students" => $students, "activeId" => $activeId];
         }
 
         public static function refreshQueue($roomId) {

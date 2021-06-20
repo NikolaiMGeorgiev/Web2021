@@ -13,7 +13,7 @@
 
             $connection = self::initConnection();
             
-            $stmt = $connection->prepare("SELECT * 
+            $stmt = $connection->prepare("SELECT users.name, users.email, users.id, comments.content, comments.createdAt
                                           FROM comments JOIN users ON comments.userId=users.id 
                                           WHERE roomId=:roomId 
                                           ORDER BY createdAt ASC");
@@ -25,12 +25,12 @@
             $comments = [];
 
             while ($row = $stmt->fetch()) {
-                $user = new User($row["users.name"], $row["users.email"], $row["users.id"]);
-                $comment = new Comment($row["comments.content"], $row["comments.createdAt"]);
+                
+                $comment = new Comment($row["content"], $row["createdAt"]);
 
                 $comments[] = [
                     "comment" => $comment,
-                    "user" => $user
+                    "user" => $row["name"]
                 ];
             }
 
