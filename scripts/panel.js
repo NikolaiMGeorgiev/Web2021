@@ -11,13 +11,13 @@ async function loadEvents (userType) {
             container.insertAdjacentHTML('beforeend', eventHTML);
         }
 
-        var eventContainers = document.querySelectorAll(".event");
-
-        for (var event of eventContainers) {
+        document.querySelectorAll(".event").forEach(function(event) {
             event.addEventListener("click", function() {
-                window.location.href = "queue.html?roomId=" + event.getAttribute("id");
+                if ((userType == 1 && events[eventId].room['activated'] == 1) || (userType == 2)) {
+                    window.location.href = "queue.html?roomId=" + event.getAttribute("id");
+                }
             })
-        }
+        })
     } else {
         var message = userType == 1 ? 
             '<p>Няма събития, за които да сте поканени.</p>' :
@@ -35,47 +35,64 @@ function getEventHTML (userType, event) {
     var date = startData[0].split("-");
     var time = startData[1].split(":");
     var start = date[2] + "." + date[1] + "." + date[0] + " в " + time[0] + ":" + time[1] + "ч.";
+    
     if (userType === 1) {
-        var eventHTML =
-            '<div class="event" id="'+  event.room['id'] + '">' +
-                '<header>' +
-                    '<h2 class="name" class="bold">' + event.room["name"] + '</h2>' +
-                    '<h3 class="date">' + start + '</h3>' +
-                '</header>' +
-                '<article class="event-info-container one-row">' +
-                    '<h3 class="place">' +
-                        '<span class="heading-label">Ред: </span>' + 
-                        '<span class="lighter">' + event['place']  + '</span>' +
-                    '</h3>' +
-                    '<h3 class="place_time">' +
-                        '<span class="heading-label">Час за реда: </span>' +
-                        '<span class="lighter">' + event['placeTime'] + '</span>' +
-                    '</h3>' +
-                    '<h3 class="teacher">' +
-                        '<span class="heading-label">Препозавател: </span>' +
-                        '<span  class="lighter">' + event['teacher'] + '</span>' +
-                    '</h3>' +
-                '</article>' +
-            '</div>';
+        return getStudentEvent(event, start, time);
     } else {
-        var eventHTML =
-            '<div class="event" id="'+ event['id'] + '">' +
-                '<header>' +
-                    '<h2 class="name" class="bold">' + event["name"] + '</h2>' +
-                    '<h3 class="date">' + start + '</h3>' +
-                '</header>' +
-                '<article class="event-info-container one-row-even">' +
-                    '<h3 class="meet-interval">' +
-                        '<span class="heading-label">Време за среща: </span>' +
-                        '<span class="lighter">' + event['meetInterval'] + ' мин.</span>' +
-                    '</h3>' +
-                    '<h3 class="waiting-interval">' +
-                        '<span class="heading-label">Време за чакане: </span>' +
-                        '<span  class="lighter">' + event['waitingInterval'] + ' мин.</span>' +
-                    '</h3>' +
-                '</article>' +
-            '</div>';
+        return getTeacherEvent(event, start);
     }
+}
+
+function getStudentEvent(event, start, time) {
+    var minutes = (parseInt(event.room['meetInterval']) + parseInt(event.room['waitingInterval'])) * parseInt(event['place']);
+    var startTime = new Date();
+    startTime.setHours(time[0]);
+    startTime.setMinutes(time[1]);
+    startTime = new Date(startTime.getTime() + minutes * 60000);
+
+    var eventHTML =
+        '<div class="event" id="'+  event.room['id'] + '">' +
+            '<header>' +
+                '<h2 class="name" class="bold">' + event.room["name"] + '</h2>' +
+                '<h3 class="date">' + start + '</h3>' +
+            '</header>' +
+            '<article class="event-info-container one-row">' +
+                '<h3 class="place">' +
+                    '<span class="heading-label">Ред: </span>' + 
+                    '<span class="lighter">' + event['place']  + '</span>' +
+                '</h3>' +
+                '<h3 class="place_time">' +
+                    '<span class="heading-label">Час за реда: </span>' +
+                    '<span class="lighter">' + startTime.getHours() + ":" + startTime.getMinutes() + '</span>' +
+                '</h3>' +
+                '<h3 class="teacher">' +
+                    '<span class="heading-label">Препозавател: </span>' +
+                    '<span  class="lighter">' + event['teacher'] + '</span>' +
+                '</h3>' +
+            '</article>' +
+        '</div>';
+
+    return eventHTML;
+}
+
+function getTeacherEvent(event, start) {
+    var eventHTML =
+        '<div class="event" id="'+ event['id'] + '">' +
+            '<header>' +
+                '<h2 class="name" class="bold">' + event["name"] + '</h2>' +
+                '<h3 class="date">' + start + '</h3>' +
+            '</header>' +
+            '<article class="event-info-container one-row-even">' +
+                '<h3 class="meet-interval">' +
+                    '<span class="heading-label">Време за среща: </span>' +
+                    '<span class="lighter">' + event['meetInterval'] + ' мин.</span>' +
+                '</h3>' +
+                '<h3 class="waiting-interval">' +
+                    '<span class="heading-label">Време за чакане: </span>' +
+                    '<span  class="lighter">' + event['waitingInterval'] + ' мин.</span>' +
+                '</h3>' +
+            '</article>' +
+        '</div>';
 
     return eventHTML;
 }

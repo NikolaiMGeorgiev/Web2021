@@ -10,22 +10,7 @@ window.onload = async function() {
     })
     
     if(document.getElementById("nav_panel")) {
-        document.getElementById("nav_panel").addEventListener("click", function () {
-            window.location.href = "panel.html";
-        });
-        document.getElementById("nav_profile").addEventListener("click", function () {
-            window.location.href = "profile.html";
-        });
-        document.getElementById("nav_exit").addEventListener("click", function () {
-            logout();
-        });
-
-        if (userType === 2) {
-            addCreateEventButton();
-            document.getElementById("nav_new_room").addEventListener("click", function () {
-                window.location.href = "add_room.html";
-            });
-        }
+        initNav(userType);
     }
 
     if (document.getElementById("events")) {
@@ -35,48 +20,74 @@ window.onload = async function() {
     }
 
     if (window.location.href.includes("queue.html")) {
-        var utlParam = window.location.href.split("?")[1];
-        var roomId = utlParam.substring(utlParam.indexOf('=') + 1);
-        var userType = await getUserType();
-
-        renderScheduleTable(roomId);
-
-        document.getElementById("comment_form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            addComment(roomId);
-        });
-
-        if (userType === 1) {
-            enterQueue(roomId);
-        } else {
-            initTeacherButtons();
-            document.getElementById("bnt-next").addEventListener("click", function () {
-                if (document.querySelectorAll("#queue tbody tr:not(#empty_row)").length) {
-                    nextAnimation();
-                    finishCurrentMeeting(roomId);
-                    startNextMeeting(roomId);
-                    getQueueStatus(roomId);
-                }
-            });
-        
-            document.getElementById("btn-break").addEventListener("click", function() {
-                if (document.querySelectorAll("#queue tbody tr:not(#empty_row)").length) {
-                    finishCurrentMeeting(roomId);
-                    getQueueStatus(roomId);
-                }
-            });
-        }
-
-        renderQueueTable(roomId, userType);
-        renderComments(roomId);
-
-        var intervalId = window.setInterval(function(){
-            renderQueueTable(roomId, userType);
-            getQueueStatus(roomId);
-            getLink(userType, roomId);
-            renderComments(roomId);
-        }, 5000);
+        initQueuePage(userType);
     }
+}
+
+function initNav(userType) {
+    document.getElementById("nav_panel").addEventListener("click", function () {
+        window.location.href = "panel.html";
+    });
+    document.getElementById("nav_profile").addEventListener("click", function () {
+        window.location.href = "profile.html";
+    });
+    document.getElementById("nav_exit").addEventListener("click", function () {
+        logout();
+    });
+
+    if (userType === 2) {
+        addCreateEventButton();
+        document.getElementById("nav_new_room").addEventListener("click", function () {
+            window.location.href = "add_room.html";
+        });
+    }
+}
+
+async function initQueuePage(userType) {
+    var utlParam = window.location.href.split("?")[1];
+    var roomId = utlParam.substring(utlParam.indexOf('=') + 1);
+    var roomData = await getRoomData(roomId, userType);
+
+    renderScheduleTable(roomId);
+    document.getElementById("room_name").textContent = roomData['name'];
+
+    document.getElementById("comment_form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        addComment(roomId);
+    });
+
+    if (userType === 1) {
+        enterQueue(roomId);
+    } else {
+        initTeacherButtons();
+        await initActivationButton(roomId);
+        document.getElementById("bnt-next").addEventListener("click", function () {
+            if (document.querySelectorAll("#queue tbody tr:not(#empty_row)").length) {
+                nextAnimation();
+                finishCurrentMeeting(roomId);
+                startNextMeeting(roomId);
+                refreshQueueStatus(roomId, userType);
+            }
+        });
+    
+        document.getElementById("btn-break").addEventListener("click", function() {
+            if (document.querySelectorAll("#queue tbody tr:not(#empty_row)").length) {
+                finishCurrentMeeting(roomId);
+                refreshQueueStatus(roomId, userType);
+            }
+        });
+    }
+
+    renderQueueTable(roomId, userType);
+    renderComments(roomId);
+    refreshQueueStatus(roomId, userType);
+
+    var intervalId = window.setInterval(function(){
+        renderQueueTable(roomId, userType);
+        refreshQueueStatus(roomId, userType);
+        getLink(userType, roomId);
+        renderComments(roomId);
+    }, 5000);
 }
 
 async function getUserType() {

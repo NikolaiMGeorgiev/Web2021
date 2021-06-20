@@ -71,28 +71,41 @@ async function startEvent(roomId) {
     }).then(data => data.json());   
 }
 
+async function refreshQueueStatus(roomId, userType) {
+    var statusData = await getQueueStatus(roomId);
+    var statusElement = document.getElementById("status");
+
+    if (statusData[0].id === "not_started" && userType === 1) {
+        window.location.href = "panel.html";
+    }
+    
+    if (statusData[0].id === "meeting" && 
+    (statusElement.classList.contains("waiting") || statusElement.classList.contains("finished"))) {
+        nextAnimation();
+    }
+
+    statusElement.textContent = statusData[0].response;
+    statusElement.classList.remove("waiting", "meeting", "finished");
+    statusElement.classList.add(statusData[0].id);
+}
+
 async function getQueueStatus(roomId) {
     const response = await fetch("http://localhost/Web2021/endpoints/get-queue-state.php?roomId=" + roomId, {
         method: 'GET'
     }).then(data => data.json());
-    var statusElement = document.getElementById("status");
-    if (response[0].id === "meeting" && 
-    (statusElement.classList.contains("waiting") || statusElement.classList.contains("finished"))) {
-        nextAnimation();
-    }
-    statusElement.textContent = response[0].response;
-    statusElement.classList.remove("waiting", "meeting", "finished");
-    statusElement.classList.add(response[0].id);
+    return response;
 }
 
 async function getLink(userType, roomId) {
-    if (userType === 1 && !document.getElementById("link_wrapper")) {
+    if (userType === 1) {
         const response = await fetch("http://localhost/Web2021/endpoints/students.php?roomId=" + roomId, {
             method: 'GET'
         }).then(data => data.json());
-        
-        if (response.link) {
+
+        if (response.link && !document.getElementById("link_wrapper")) {
             showLink(response.link);
+        } else if (!response.link && document.getElementById("link_container")) {
+            window.location.href = "panel.html";
         }
     }
 }
@@ -119,6 +132,26 @@ async function enterQueue(roomId){
     }).then(data => data.json());
 }
 
+async function startQueue(roomId) {
+    const response = fetch("http://localhost/Web2021/endpoints/queue.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: roomId,
+    }).then(data => data.json());
+}
+
+async function endQueue(roomId) {
+    const response = fetch("http://localhost/Web2021/endpoints/queue.php?active=0", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: roomId,
+    }).then(data => data.json());
+}
+
 async function selectNextMeeting(roomId, studentId) {
     const response = await fetch(
     "http://localhost/Web2021/endpoints/process-queue.php?roomId=" + roomId + "&studentId=" + studentId, {
@@ -130,9 +163,54 @@ function initTeacherButtons() {
     var container = document.getElementById("btn-container");
     var buttonsHtml = 
         '<button id="bnt-next" class="gradient-btn-green">Следващ</button>' +
-        '<button id="btn-break" class="gradient-btn-yellow">Почивка</button>';
+        '<button id="btn-break" class="gradient-btn-yellow">Почивка</button>' + 
+        '<button id="btn-activate" class="gradient-btn">Старт</button>';
 
     container.innerHTML = buttonsHtml;
+}
+
+async function initActivationButton(roomId) {
+    await renderActivationButton(roomId);
+
+    document.getElementById("btn-activate").addEventListener("click", async function() {
+        var queueStatus = await getQueueStatus(roomId);
+
+        if (queueStatus[0]['id'] === "not_started") {
+            await startQueue(roomId);
+        } else {
+            await endQueue(roomId);
+        }
+
+        await renderActivationButton(roomId);
+    })
+}
+
+async function renderActivationButton(roomId) {
+    var statusData = await getQueueStatus(roomId);
+    var status = statusData[0]['id'];
+    var activationButton = document.getElementById("btn-activate");
+
+    if (status === "not_started") {
+        activationButton.textContent = "Старт";
+        activationButton.classList.replace("gradient-cancel-btn", "gradient-btn");
+    } else {
+        activationButton.textContent = "Край";
+        activationButton.classList.replace("gradient-btn", "gradient-cancel-btn");
+    }
+}
+
+async function getRoomData(roomId, userType) {
+    var roomsData = await fetch('http://localhost/Web2021/endpoints/room.php', {
+        method: 'GET'
+    }).then(data => data.json());
+
+    for (roomData of roomsData) {
+        if (userType == 1 && roomData.room['id'] == roomId) {
+            return roomData.room;
+        } else if (userType == 2 && roomData['id'] == roomId) {
+            return roomData;
+        }
+    }
 }
 
 function showLink(link) {
@@ -144,6 +222,7 @@ function showLink(link) {
             '<input id="link" name="link" value="' + link + '" disabled>' +
         '</div>';
     var linkContainer = document.createElement("div");
+
     linkContainer.setAttribute("id", "link_wrapper");
     linkContainer.innerHTML = linkHTML;
     container.append(linkContainer);
@@ -175,7 +254,7 @@ async function addComment(roomId) {
     const data = {
         "content": document.getElementById("comment_add").value,
         "roomId": roomId
-    }
+    };
     const response = fetch("http://localhost/Web2021/endpoints/comments.php", {
         method: 'POST',
         headers: {
@@ -200,10 +279,10 @@ async function renderComments(roomId) {
             commentNode.innerHTML = getCommentHTML(response[i]);
             document.getElementById("commnets-wrapper").appendChild(commentNode);
         }
+        
         var wrapper = document.getElementById("commnets-wrapper")
         wrapper.scrollTop = wrapper.scrollHeight;
     }
-
 }
 
 function getCommentHTML(commentData) {

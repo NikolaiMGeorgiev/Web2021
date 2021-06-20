@@ -166,18 +166,4 @@ function buttonsInit (addButton, removeButton) {
     });
 }
 
-function getStartDateAndTime (date, time) {
-    var start = new Date();
-    var startDate = date.value.split("-");
-    var startTime = time.value.split(":");
-
-    start.setDate(startDate[2]);
-    start.setMonth(startDate[1]);
-    start.setFullYear(startDate[0]);
-    start.setHours(startTime[0]);
-    start.setMinutes(startTime[1]);
-
-    return start;
-}
-
 init();

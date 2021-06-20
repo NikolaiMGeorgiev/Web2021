@@ -7,14 +7,16 @@ class Room implements JsonSerializable
     private $waitingInterval;
     private $meetInterval;
     private $start;
+    private $activated;
 
-    public function __construct($id, $name, $waitingInterval, $meetInterval, $start)
+    public function __construct($id, $name, $waitingInterval, $meetInterval, $start, $activated)
     {
         $this->name = $name;
         $this->waitingInterval = $waitingInterval;
         $this->meetInterval = $meetInterval;
         $this->start = $start;
         $this->id = $id;
+        $this->activated = $activated;
     }
     
     public function getId() {
@@ -39,7 +41,7 @@ class Room implements JsonSerializable
 
     //Override
     public function jsonSerialize() {
-        $fieldsToSerialize = ["id" ,"name", "waitingInterval", "meetInterval", "start"];
+        $fieldsToSerialize = ["id" ,"name", "waitingInterval", "meetInterval", "start", "activated"];
 
         $jsonArray = [];
 

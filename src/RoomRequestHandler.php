@@ -90,12 +90,12 @@
                 ]);
 
                 while ($row = $stmt->fetch()) {
-                    $response[] = new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]);
+                    $response[] = new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"], $row['activated']);
                 }
 
             } else if ($role["code"] == "STUDENT") {
                 $stmt = $connection->prepare(
-                    "SELECT *
+                    "SELECT rooms.*, users.name AS teacher, schedule.place
                     FROM schedule JOIN rooms ON schedule.roomId = rooms.id
                     JOIN users ON rooms.userId = users.id
                     WHERE schedule.userId=:userId"
@@ -107,8 +107,8 @@
                 
                 while ($row = $stmt->fetch()) {
                     $response[] = [
-                        "room" => new Room($row["rooms.id"], $row["rooms.name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]),
-                        "teacher" => new User($row["users.name"], $row["users.email"], $row["users.id"]),
+                        "room" => new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"], $row["activated"]),
+                        "teacher" => $row['teacher'],
                         "place" => $row["place"]
                     ];
                 }

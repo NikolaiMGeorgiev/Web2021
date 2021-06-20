@@ -3,7 +3,7 @@ function init() {
         document.getElementById("login_form").addEventListener("submit", function (event) {
             event.preventDefault();
 
-            if (validateInput()) {
+            if (validateEmptyFields()) {
                 postForm('login');
             } else {
                 event.preventDefault();
@@ -27,7 +27,7 @@ function init() {
         document.getElementById("register_student_form").addEventListener("submit", function (event) {
             event.preventDefault();
 
-            if (validateInput()) {
+            if (validateEmptyFields() && validateInput()) {
                 postForm('register', 1);
             } else {
                 event.preventDefault();
@@ -37,7 +37,7 @@ function init() {
 
     if (document.getElementById("register_teacher_form")) {
         document.getElementById("register_teacher_form").addEventListener("submit", function (event) {
-            if (validateInput()) {
+            if (validateEmptyFields() && validateInput()) {
                 postForm('register', 2);
             } else {
                 event.preventDefault();
@@ -58,18 +58,22 @@ async function postForm (formType, userTypeId = 0) {
         body: data,
     }).then(data => data.json());
     var response = responseJSON.success;
-    
-    if (!response && !document.getElementById("error_validation")) {
-        let inputs = document.getElementsByTagName("input");
-        let lastInput = inputs[inputs.length - 1];
-        let error = document.createElement("small");
-        error.classList.add("error_field");
-        error.setAttribute("id", "error_validation");
-        error.textContent = "Невалидни входни данни";
-        lastInput.parentNode.insertBefore(error, lastInput.nextSibling);
+
+    if (!response) {
+        if (!document.getElementById("error_validation")) {
+            let inputs = document.getElementsByTagName("input");
+            let lastInput = inputs[inputs.length - 1];
+            let error = document.createElement("small");
+
+            error.classList.add("error_field");
+            error.setAttribute("id", "error_validation");
+            error.textContent = "Невалидни входни данни";
+            lastInput.parentNode.insertBefore(error, lastInput.nextSibling);
+        }
     } else {
         window.location.href = formType === "register" ? "register_success.html" : "panel.html"
     }
+    
 }
 
 function validateInput () {
@@ -77,17 +81,7 @@ function validateInput () {
     let isValid = true;
 
     for (const input of inputs) {
-        if (input.value == "") {
-            if (!document.getElementById("error_" + input.id)) {
-                let error = document.createElement("small");
-                error.classList.add("error_field");
-                error.setAttribute("id", "error_" + input.id);
-                error.textContent = "Полето е задължително";
-                input.parentNode.insertBefore(error, input.nextSibling);
-            }
-
-            isValid = false;
-        } else if (input.value != "" && document.getElementById("error_" + input.id)) {
+       if (document.getElementById("error_" + input.id)) {
             if (input.name == "email" && !isValidEmail(input.value)) {
                 document.getElementById("error_" + input.id).textContent = "Невалиден имейл";
                 isValid = false;
@@ -100,23 +94,42 @@ function validateInput () {
 
             document.getElementById("error_" + input.id).remove();
         } else if (input.name == "email" && !isValidEmail(input.value)) {
-            let error = document.createElement("small");
-            error.classList.add("error_field");
-            error.setAttribute("id", "error_email");
-            error.textContent = "Невалиден имейл";
-            input.parentNode.insertBefore(error, input.nextSibling);
+            addError(input, "Невалиден имейл");
             isValid = false;
         } else if (input.name == "password" && !isValidPassword(input.value)) {
-            let error = document.createElement("small");
-            error.classList.add("error_field");
-            error.setAttribute("id", "error_password");
-            error.textContent = "Невалидена парола";
-            input.parentNode.insertBefore(error, input.nextSibling);
+            addError(input, "Невалидена парола");
             isValid = false;
         }
     }
 
     return isValid;
+}
+
+function validateEmptyFields() {
+    let inputs = document.getElementsByTagName("input");
+    let isValid = true;
+
+    for (const input of inputs) {
+        if (input.value == "") {
+            if (!document.getElementById("error_" + input.id)) {
+                addError(input, "Полето е задължително");
+            }
+
+            isValid = false;
+        } else if (document.getElementById("error_" + input.id)) {
+            document.getElementById("error_" + input.id).remove();
+        }
+    }
+
+    return isValid;
+}
+
+function addError(input, errorMessage) {
+    let error = document.createElement("small");
+    error.classList.add("error_field");
+    error.setAttribute("id", "error_" + input.id);
+    error.textContent = errorMessage;
+    input.parentNode.insertBefore(error, input.nextSibling);
 }
 
 function isValidEmail(email) {

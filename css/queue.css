@@ -121,7 +121,11 @@ td {
 }
 
 #page_header {
-    margin: 20px 0px
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0px;
 }
 
 header h1 {

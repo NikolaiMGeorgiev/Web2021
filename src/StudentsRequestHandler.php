@@ -47,7 +47,7 @@
                 throw new BadRequestException("Invalid student");
             }
 
-            if ($student["active"]==0) {
+            if ($student["active"] == 0) {
                 return "";
             }
 

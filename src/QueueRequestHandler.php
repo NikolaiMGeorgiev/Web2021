@@ -13,10 +13,17 @@
             }
 
             $connection = self::initConnection();
+
+            if(isset($_GET["active"])) {
+                $activated = $_GET["active"];
+            } else {
+                $activated = 1;
+            }
             
-            $stmt = $connection->prepare("UPDATE rooms SET currentTime=now() WHERE id=:id");
+            $stmt = $connection->prepare("UPDATE rooms SET currentTime=now(), activated=:activated WHERE id=:id");
 
             $stmt->execute([
+                "activated" => $activated,
                 "id" => $roomId
             ]);
             $success = $stmt->fetch();
@@ -79,33 +86,41 @@
             $meetInterval = $room["meetInterval"];
             $isInMeeting = $room["state"];
             $currentTime = $room["currentTime"];
-
-            if ($isInMeeting) {
-                if ( (strtotime($currentTime) + ($meetInterval*self::secondsInMinute)) < strtotime(date('Y-m-d H:i:s')) ) {
-                    return array([
-                        "response" => "Времето за среща изтече",
-                        "id" => "finished"
-                    
-                    ]);
+            
+            if ($room['activated']) {
+                if ($isInMeeting) {
+                    if ( (strtotime($currentTime) + ($meetInterval*self::secondsInMinute)) < strtotime(date('Y-m-d H:i:s')) ) {
+                        return array([
+                            "response" => "Времето за среща изтече",
+                            "id" => "finished"
+                        
+                        ]);
+                    } else {
+                        return array([
+                            "response" => "Провежда се среща",
+                            "id" => "meeting"
+                        ]);
+                    }
                 } else {
-                    return array([
-                        "response" => "Провежда се среща",
-                        "id" => "meeting"
-                    ]);
+                    if ( (strtotime($currentTime) + ($waitingTime*self::secondsInMinute)) < strtotime(date('Y-m-d H:i:s')) ) {
+                        return array([
+                            "response" => "Времето за чакане изтече",
+                            "id" => "finished"
+                        ]);
+                    } else {
+                        return array([
+                            "response" => "Изчакване",
+                            "id" => "waiting"
+                        ]);
+                    }
                 }
             } else {
-                if ( (strtotime($currentTime) + ($waitingTime*self::secondsInMinute)) < strtotime(date('Y-m-d H:i:s')) ) {
-                    return array([
-                        "response" => "Времето за чакане изтече",
-                        "id" => "finished"
-                    ]);
-                } else {
-                    return array([
-                        "response" => "Изчакване",
-                        "id" => "waiting"
-                    ]);
-                }
+                return array([
+                    "response" => "Събитието не е почнало",
+                    "id" => "not_started"
+                ]);
             }
+            
         }
 
         public static function getNext($roomId) {
