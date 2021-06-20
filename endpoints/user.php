@@ -27,9 +27,6 @@
         case "PUT" : {
             break;
         }
-        case "DELETE" : {
-
-        }
     }
 
 ?>
