@@ -36,6 +36,11 @@ td {
     background: rgb(224, 248, 244);
 }
 
+#queue tr:hover td {
+    cursor: pointer;
+    background: rgb(157, 235, 187);
+}
+
 #comments {
     display: grid;
     grid-template-rows: 42px 6fr 1fr;
@@ -164,6 +169,10 @@ header h1 {
 
 .finished {
     color: rgb(204, 6, 6);
+}
+
+.active td{
+    background: rgb(13, 165, 58);
 }
 
 #page-content-wrapper {

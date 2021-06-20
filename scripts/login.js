@@ -50,7 +50,6 @@ async function postForm (formType, userTypeId = 0) {
     const data = getFormDataJSON(userTypeId);
     const url = formType === "register" ? "http://localhost/Web2021/endpoints/user.php" :
         "http://localhost/Web2021/endpoints/session.php";
-    var response;
     const responseJSON = await fetch(url, {
         method: 'POST',
         headers: {
@@ -58,7 +57,7 @@ async function postForm (formType, userTypeId = 0) {
         },
         body: data,
     }).then(data => data.json());
-    response = responseJSON.success;
+    var response = responseJSON.success;
     
     if (!response && !document.getElementById("error_validation")) {
         let inputs = document.getElementsByTagName("input");
@@ -90,7 +89,11 @@ function validateInput () {
             isValid = false;
         } else if (input.value != "" && document.getElementById("error_" + input.id)) {
             if (input.name == "email" && !isValidEmail(input.value)) {
-                document.getElementById("error_" + input.id).textContent = "Грешен имейл";
+                document.getElementById("error_" + input.id).textContent = "Невалиден имейл";
+                isValid = false;
+                continue;
+            } else if (input.name == "password" && !isValidPassword(input.value)) {
+                document.getElementById("error_" + input.id).textContent = "Невалидена парола";
                 isValid = false;
                 continue;
             }
@@ -100,7 +103,14 @@ function validateInput () {
             let error = document.createElement("small");
             error.classList.add("error_field");
             error.setAttribute("id", "error_email");
-            error.textContent = "Грешен имейл";
+            error.textContent = "Невалиден имейл";
+            input.parentNode.insertBefore(error, input.nextSibling);
+            isValid = false;
+        } else if (input.name == "password" && !isValidPassword(input.value)) {
+            let error = document.createElement("small");
+            error.classList.add("error_field");
+            error.setAttribute("id", "error_password");
+            error.textContent = "Невалидена парола";
             input.parentNode.insertBefore(error, input.nextSibling);
             isValid = false;
         }
@@ -112,6 +122,11 @@ function validateInput () {
 function isValidEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
+}
+
+function isValidPassword(password) {
+    const re = /[a-zA-Z]/;
+    return password.length > 5 && re.test(password);
 }
 
 function getFormDataJSON (userTypeId) {

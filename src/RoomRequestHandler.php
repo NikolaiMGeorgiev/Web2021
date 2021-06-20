@@ -112,27 +112,31 @@
                     $list = $list . "'". $roomId . "'" . ",";
                 }
                 $list = substr_replace($list, "", -1);
-                
-                $stmt = $connection->prepare("SELECT * FROM queues WHERE userId=:userId AND roomId IN ( " . $list . " )");
+
+                $stmt = $connection->prepare("SELECT * FROM schedule WHERE userId=:userId AND roomId IN ( " . $list . " )");
                 $stmt->execute([
                     "userId" => $id
                 ]); 
 
                 $indexes = [];
                 while ($row = $stmt->fetch()) {
-                    $indexes[$row["roomId"]] = $row["userIndex"];
+                    $indexes[$row["roomId"]] = $row["place"];
                 }
 
-                $stmt = $connection->prepare("SELECT * FROM rooms WHERE id IN ( " . $list . " )");
-                $stmt->execute();
-                
-                $response = [];
+                if (!empty($indexes)) {
+                    $stmt = $connection->prepare("SELECT * FROM rooms WHERE id IN ( " . $list . " )");
+                    $stmt->execute();
+                    
+                    $response = [];
 
-                while ($row = $stmt->fetch()) {
-                    $response[] = [
-                        "room" => new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]),
-                        "userIndex" => $indexes[$row["id"]]
-                    ];
+                    while ($row = $stmt->fetch()) {
+                        $response[] = [
+                            "room" => new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"]),
+                            "userIndex" => $indexes[$row["id"]]
+                        ];
+                    }
+                } else {
+                    $response = [];
                 }
             }
 

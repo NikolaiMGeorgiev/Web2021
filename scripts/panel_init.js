@@ -51,23 +51,27 @@ window.onload = async function() {
         } else {
             initTeacherButtons();
             document.getElementById("bnt-next").addEventListener("click", function () {
-                nextAnimation();
-                finishCurrentMeeting(roomId);
-                startNextMeeting(roomId);
-                getQueueStatus(roomId);
+                if (document.querySelectorAll("#queue tbody tr:not(#empty_row)").length) {
+                    nextAnimation();
+                    finishCurrentMeeting(roomId);
+                    startNextMeeting(roomId);
+                    getQueueStatus(roomId);
+                }
             });
         
             document.getElementById("btn-break").addEventListener("click", function() {
-                finishCurrentMeeting(roomId);
-                getQueueStatus(roomId);
+                if (document.querySelectorAll("#queue tbody tr:not(#empty_row)").length) {
+                    finishCurrentMeeting(roomId);
+                    getQueueStatus(roomId);
+                }
             });
         }
 
-        renderQueueTable(roomId);
+        renderQueueTable(roomId, userType);
         renderComments(roomId);
 
         var intervalId = window.setInterval(function(){
-            renderQueueTable(roomId);
+            renderQueueTable(roomId, userType);
             getQueueStatus(roomId);
             getLink(userType, roomId);
             renderComments(roomId);
@@ -80,7 +84,6 @@ async function getUserType() {
         const userData = await fetch('http://localhost/Web2021/endpoints/session.php', {
             method: 'GET'
         }).then(data => data.json());
-        console.log(userData);
         if (userData['fn']) {
             return 1;
         } else {
@@ -89,7 +92,6 @@ async function getUserType() {
     } catch (e) {
         return 0;
     }
-    
 }
 
 function addCreateEventButton () {

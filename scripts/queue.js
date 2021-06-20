@@ -1,26 +1,39 @@
-async function renderQueueTable(roomId) {
+async function renderQueueTable(roomId, userType) {
     const response = await fetch("http://localhost/Web2021/endpoints/queue.php?roomId=" + roomId, {
         method: 'GET'
     }).then(data => data.json());
     
     var queue = document.querySelector("#queue tbody");
     var tableHTML = "";
-    if (response.length > 0) {
-        for(var i = 0; i < response.length; i++) {
+
+    if (response['students'].length > 0) {
+        for(var i = 0; i < response['students'].length; i++) {
+            var isActive = response['students'][i]['id'] === response['activeId'];
             tableHTML += 
-                '<tr>' +
+                '<tr id="' + response['students'][i]['id'] + '"' + (isActive ? 'class="active"' : '') + '>' +
                     '<td>' + (i + 1) + '</td>' +
-                    '<td>' + response[i]['name'] + '</td>' +
+                    '<td>' + response['students'][i]['name'] + '</td>' +
                 '</td>';
         }
     } else {
         tableHTML = 
-        '<tr>' +
+        '<tr id="empty_row">' +
             '<td colspan="2">Няма студенти в опашката.</td>' + 
         '</tr>';
     }
     
     queue.innerHTML = tableHTML;
+
+    if(userType === 2) {
+        document.querySelectorAll("#queue tbody tr").forEach(function(element) {
+            if (element.getAttribute("id") != "empty_row") {
+                element.addEventListener("click", function () {
+                    var studentId = element.getAttribute("id");
+                    selectNextMeeting(roomId, studentId);
+                });
+            }
+        });
+    }
 }
 
 async function renderScheduleTable(roomId) {
@@ -104,6 +117,13 @@ async function enterQueue(roomId){
         },
         body: roomId,
     }).then(data => data.json());
+}
+
+async function selectNextMeeting(roomId, studentId) {
+    const response = await fetch(
+    "http://localhost/Web2021/endpoints/process-queue.php?roomId=" + roomId + "&studentId=" + studentId, {
+        method: 'GET'
+    }).then(data => data.json()); 
 }
 
 function initTeacherButtons() {
