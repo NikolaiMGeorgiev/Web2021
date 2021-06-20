@@ -61,7 +61,7 @@
                 }
             }
 
-            return [ "students" => $students, "activeId" => $activeId];
+            return ["students" => $students, "activeId" => $activeId];
         }
 
         public static function refreshQueue($roomId) {

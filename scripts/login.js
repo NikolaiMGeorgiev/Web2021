@@ -48,7 +48,7 @@ function init() {
 
 async function postForm (formType, userTypeId = 0) {
     const data = getFormDataJSON(userTypeId);
-    const url = formType === "register" ? "http://localhost/Web2021/endpoints/user.php" :
+    const url = formType == "register" ? "http://localhost/Web2021/endpoints/user.php" :
         "http://localhost/Web2021/endpoints/session.php";
     const responseJSON = await fetch(url, {
         method: 'POST',
@@ -71,7 +71,7 @@ async function postForm (formType, userTypeId = 0) {
             lastInput.parentNode.insertBefore(error, lastInput.nextSibling);
         }
     } else {
-        window.location.href = formType === "register" ? "register_success.html" : "panel.html"
+        window.location.href = formType == "register" ? "register_success.html" : "panel.html";
     }
     
 }
