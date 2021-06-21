@@ -1,3 +1,23 @@
+-- phpMyAdmin SQL Dump
+-- version 5.0.4
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jun 21, 2021 at 08:52 PM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 8.0.2
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+-- --------------------------------------------------------
 
 --
 -- Dumping data for table `rooms`
@@ -5,8 +25,10 @@
 
 INSERT INTO `rooms` (`id`, `name`, `waitingInterval`, `meetInterval`, `start`, `userId`, `currentTime`, `state`, `activated`) VALUES
 (60, 'Небесна механика', 1, 10, '2021-06-30 06:30:00', 40, NULL, 0, 0),
-(61, 'Реторика', 1, 5, '2021-06-20 23:10:42', 40, '2021-06-20 23:10:42', 0, 0),
+(61, 'Реторика', 1, 5, '2021-06-21 17:18:10', 40, '2021-06-21 17:18:10', 0, 1),
 (62, 'Дерматология', 5, 20, '2021-06-25 11:00:00', 40, NULL, 0, 0);
+
+-- --------------------------------------------------------
 
 --
 -- Dumping data for table `schedule`
@@ -27,6 +49,8 @@ INSERT INTO `schedule` (`id`, `userId`, `roomId`, `place`) VALUES
 (40, 37, 62, 3),
 (41, 37, 61, 5);
 
+-- --------------------------------------------------------
+
 --
 -- Dumping data for table `students_details`
 --
@@ -38,6 +62,7 @@ INSERT INTO `students_details` (`id`, `fn`, `degree`, `year`, `userId`) VALUES
 (17, 64444, 'СИ', '3', 37),
 (18, 65555, 'СИ', '3', 38);
 
+-- --------------------------------------------------------
 
 --
 -- Dumping data for table `users`
@@ -52,13 +77,8 @@ INSERT INTO `users` (`id`, `name`, `password`, `email`, `userTypeId`) VALUES
 (39, 'Преподавател Преподавателски', '$2y$10$2f2/JJ3/uJk7NdCpnZQehebJdtioe9XwQGzubRY/VtQ85Csq367R2', 'pp@example.com', 2),
 (40, 'Мастър Йода', '$2y$10$WXHFH6qA5grYxVXjr7YVEu.MVWqmBGLkk064Qcy6ip7BgLReVEZGS', 'ioda@example.com', 2);
 
---
--- Dumping data for table `usertypes`
---
+-- --------------------------------------------------------
 
-INSERT INTO `usertypes` (`id`, `name`, `code`) VALUES
-(1, 'Студент', 'STUDENT'),
-(2, 'Преподавател', 'TEACHER');
 
 --
 -- Dumping data for table `queues`
@@ -71,47 +91,9 @@ INSERT INTO `queues` (`userIndex`, `userId`, `roomId`, `active`) VALUES
 (3, 38, 61, 0);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Dumping data for table `usertypes`
 --
 
---
--- AUTO_INCREMENT for table `comments`
---
-ALTER TABLE `comments`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `queues`
---
-ALTER TABLE `queues`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
-
---
--- AUTO_INCREMENT for table `rooms`
---
-ALTER TABLE `rooms`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
-
---
--- AUTO_INCREMENT for table `schedule`
---
-ALTER TABLE `schedule`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
-
---
--- AUTO_INCREMENT for table `students_details`
---
-ALTER TABLE `students_details`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
-
---
--- AUTO_INCREMENT for table `usertypes`
---
-ALTER TABLE `usertypes`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+INSERT INTO `usertypes` (`id`, `name`, `code`) VALUES
+(1, 'Студент', 'STUDENT'),
+(2, 'Преподавател', 'TEACHER');
