@@ -50,8 +50,8 @@ function init() {
 
 async function postForm (formType, userTypeId = 0) {
     const data = getFormDataJSON(userTypeId);
-    const url = formType == "register" ? "http://localhost/Web2021/endpoints/user.php" :
-        "http://localhost/Web2021/endpoints/session.php";
+    const url = formType == "register" ? "endpoints/user.php" :
+        "endpoints/session.php";
     const responseJSON = await fetch(url, {
         method: 'POST',
         headers: {
