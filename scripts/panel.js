@@ -1,5 +1,5 @@
 async function loadEvents (userType) {
-    var events = await fetch('http://localhost/Web2021/endpoints/room.php', {
+    var events = await fetch('endpoints/room.php', {
         method: 'GET'
     }).then(data => data.json());
 
@@ -102,7 +102,7 @@ function getTeacherEvent(event, start) {
 }
 
 async function loadUserInfo (userType) {
-    const userData = await fetch('http://localhost/Web2021/endpoints/session.php', {
+    const userData = await fetch('endpoints/session.php', {
         method: 'GET'
     }).then(data => data.json());
 

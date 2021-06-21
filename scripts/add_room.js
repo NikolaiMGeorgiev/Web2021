@@ -40,7 +40,7 @@ function init() {
 }
 
 async function postForm() {
-    const response = await fetch("http://localhost/Web2021/endpoints/room.php", {
+    const response = await fetch("endpoints/room.php", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

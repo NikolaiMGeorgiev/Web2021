@@ -92,7 +92,7 @@ async function initQueuePage(userType) {
 
 async function getUserType() {
     try {
-        const userData = await fetch('http://localhost/Web2021/endpoints/session.php', {
+        const userData = await fetch('endpoints/session.php', {
             method: 'GET'
         }).then(data => data.json());
         if (userData['fn']) {
@@ -117,7 +117,7 @@ function addCreateEventButton() {
 }
 
 async function logout() {
-    const response = await fetch('http://localhost/Web2021/endpoints/session.php', {
+    const response = await fetch('endpoints/session.php', {
         method: 'DELETE'
     }).then(data => data.json());
 

@@ -1,5 +1,5 @@
 async function renderQueueTable(roomId, userType) {
-    const response = await fetch("http://localhost/Web2021/endpoints/queue.php?roomId=" + roomId, {
+    const response = await fetch("endpoints/queue.php?roomId=" + roomId, {
         method: 'GET'
     }).then(data => data.json());
 
@@ -37,7 +37,7 @@ async function renderQueueTable(roomId, userType) {
 }
 
 async function renderScheduleTable(roomId) {
-    const response = await fetch("http://localhost/Web2021/endpoints/schedule.php?roomId=" + roomId, {
+    const response = await fetch("endpoints/schedule.php?roomId=" + roomId, {
         method: 'GET'
     }).then(data => data.json());
     
@@ -62,7 +62,7 @@ async function renderScheduleTable(roomId) {
 }
 
 async function startEvent(roomId) {
-    const response = await fetch("http://localhost/Web2021/endpoints/queue.php?roomId=" + roomId, {
+    const response = await fetch("endpoints/queue.php?roomId=" + roomId, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ async function refreshQueueStatus(roomId, userType) {
 }
 
 async function getQueueStatus(roomId) {
-    const response = await fetch("http://localhost/Web2021/endpoints/get-queue-state.php?roomId=" + roomId, {
+    const response = await fetch("endpoints/get-queue-state.php?roomId=" + roomId, {
         method: 'GET'
     }).then(data => data.json());
     return response;
@@ -98,7 +98,7 @@ async function getQueueStatus(roomId) {
 
 async function getLink(userType, roomId) {
     if (userType === 1) {
-        const response = await fetch("http://localhost/Web2021/endpoints/students.php?roomId=" + roomId, {
+        const response = await fetch("endpoints/students.php?roomId=" + roomId, {
             method: 'GET'
         }).then(data => data.json());
 
@@ -111,19 +111,19 @@ async function getLink(userType, roomId) {
 }
 
 async function finishCurrentMeeting(roomId) {
-    const response = await fetch("http://localhost/Web2021/endpoints/pause-queue.php?roomId=" + roomId, {
+    const response = await fetch("endpoints/pause-queue.php?roomId=" + roomId, {
         method: 'GET'
     }).then(data => data.json()); 
 }
 
 async function startNextMeeting(roomId) {
-    const response = await fetch("http://localhost/Web2021/endpoints/process-queue.php?roomId=" + roomId, {
+    const response = await fetch("endpoints/process-queue.php?roomId=" + roomId, {
         method: 'GET'
     }).then(data => data.json()); 
 }
 
 async function enterQueue(roomId){
-    const response = fetch("http://localhost/Web2021/endpoints/students.php", {
+    const response = fetch("endpoints/students.php", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ async function enterQueue(roomId){
 }
 
 async function startQueue(roomId) {
-    const response = fetch("http://localhost/Web2021/endpoints/queue.php", {
+    const response = fetch("endpoints/queue.php", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ async function startQueue(roomId) {
 }
 
 async function endQueue(roomId) {
-    const response = fetch("http://localhost/Web2021/endpoints/queue.php?active=0", {
+    const response = fetch("endpoints/queue.php?active=0", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ async function endQueue(roomId) {
 
 async function selectNextMeeting(roomId, studentId) {
     const response = await fetch(
-    "http://localhost/Web2021/endpoints/process-queue.php?roomId=" + roomId + "&studentId=" + studentId, {
+    "endpoints/process-queue.php?roomId=" + roomId + "&studentId=" + studentId, {
         method: 'GET'
     }).then(data => data.json()); 
 }
@@ -200,7 +200,7 @@ async function renderActivationButton(roomId) {
 }
 
 async function getRoomData(roomId, userType) {
-    var roomsData = await fetch('http://localhost/Web2021/endpoints/room.php', {
+    var roomsData = await fetch('endpoints/room.php', {
         method: 'GET'
     }).then(data => data.json());
 
@@ -255,7 +255,7 @@ async function addComment(roomId) {
         "content": document.getElementById("comment_add").value,
         "roomId": roomId
     };
-    const response = fetch("http://localhost/Web2021/endpoints/comments.php", {
+    const response = fetch("endpoints/comments.php", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -267,7 +267,7 @@ async function addComment(roomId) {
 }
 
 async function renderComments(roomId) {
-    const response = await fetch("http://localhost/Web2021/endpoints/comments.php?roomId=" + roomId, {
+    const response = await fetch("endpoints/comments.php?roomId=" + roomId, {
         method: 'GET'
     }).then(data => data.json());
     const commnetsCount = document.getElementsByClassName("comment").length;
