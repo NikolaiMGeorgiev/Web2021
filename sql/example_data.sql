@@ -1,7 +1,3 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
 INSERT INTO `usertypes` (`id`, `name`, `code`) VALUES
 (1, 'Студент', 'STUDENT'),
 (2, 'Преподавател', 'TEACHER');
