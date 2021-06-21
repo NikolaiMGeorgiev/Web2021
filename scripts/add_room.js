@@ -35,11 +35,11 @@ function init() {
         }
     });
     document.getElementById("cancel_btn").addEventListener("click", function () {
-        window.location.href = "panel_html";
+        window.location.href = "panel.html";
     });
 }
 
-async function postForm () {
+async function postForm() {
     const response = await fetch("http://localhost/Web2021/endpoints/room.php", {
         method: 'POST',
         headers: {

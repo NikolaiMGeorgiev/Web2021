@@ -131,7 +131,9 @@
                 $studentId = $_GET["studentId"];
             } else {
                 $stmt = $connection->prepare(
-                    "SELECT userId, MIN(userIndex) AS minIndex FROM queues WHERE roomId=:roomId"
+                    "SELECT userId FROM queues WHERE roomId=:roomId AND userIndex = (
+                        SELECT MIN(userIndex) FROM queues
+                    )"
                 );
 
                 $stmt->execute([

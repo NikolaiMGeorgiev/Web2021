@@ -228,7 +228,7 @@ function showLink(link) {
     container.append(linkContainer);
 }
 
-function nextAnimation () {
+function nextAnimation() {
     var images = document.querySelectorAll(".animation-img");
     var currentStudent = parseInt(images[3].getAttribute("id").replace("img_", ""));
     var nextStudent = (currentStudent + 1) % 5 != 0 ? (currentStudent + 1) % 5 : 5;

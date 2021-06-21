@@ -105,7 +105,7 @@ async function getUserType() {
     }
 }
 
-function addCreateEventButton () {
+function addCreateEventButton() {
     var topBar = document.getElementById("nav_top_bar");
     var buttonContainer = document.createElement("div");
     buttonContainer.classList.add("nav-element");
@@ -116,7 +116,7 @@ function addCreateEventButton () {
     topBar.parentNode.insertBefore(buttonContainer, topBar.nextSibling);
 }
 
-async function logout () {
+async function logout() {
     const response = await fetch('http://localhost/Web2021/endpoints/session.php', {
         method: 'DELETE'
     }).then(data => data.json());

@@ -6,17 +6,21 @@ async function loadEvents (userType) {
     var container = document.getElementById("events");
 
     if(events.length) {
+        var activeIds = [];
         for (var eventId in events) {
+            if (userType == 1 && events[eventId].room["activated"] == 1) {
+                activeIds.push(events[eventId].room["id"]);
+            }
             var eventHTML = getEventHTML(userType, events[eventId]);
             container.insertAdjacentHTML('beforeend', eventHTML);
         }
 
-        document.querySelectorAll(".event").forEach(function(event) {
-            event.addEventListener("click", function() {
-                if ((userType == 1 && events[eventId].room['activated'] == 1) || (userType == 2)) {
-                    window.location.href = "queue.html?roomId=" + event.getAttribute("id");
+        document.querySelectorAll(".event").forEach(function(element) {
+            element.addEventListener("click", function() {
+                if (activeIds.includes(this.getAttribute("id")) || userType == 2) {
+                    window.location.href = "queue.html?roomId=" + this.getAttribute("id");
                 }
-            })
+            });
         })
     } else {
         var message = userType == 1 ? 
@@ -44,7 +48,7 @@ function getEventHTML (userType, event) {
 }
 
 function getStudentEvent(event, start, time) {
-    var minutes = (parseInt(event.room['meetInterval']) + parseInt(event.room['waitingInterval'])) * parseInt(event['place']);
+    var minutes = (parseInt(event.room['meetInterval']) + parseInt(event.room['waitingInterval'])) * (parseInt(event['place']) - 1);
     var startTime = new Date();
     startTime.setHours(time[0]);
     startTime.setMinutes(time[1]);
