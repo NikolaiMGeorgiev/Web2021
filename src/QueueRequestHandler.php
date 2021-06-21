@@ -132,7 +132,7 @@
             } else {
                 $stmt = $connection->prepare(
                     "SELECT userId FROM queues WHERE roomId=:roomId AND userIndex = (
-                        SELECT MIN(userIndex) FROM queues
+                        SELECT MIN(userIndex) FROM queues WHERE roomId=:roomId
                     )"
                 );
 
