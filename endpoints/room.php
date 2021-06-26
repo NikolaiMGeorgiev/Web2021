@@ -8,9 +8,14 @@
         case "GET": {  // get user's rooms 
             SessionRequestHandler::requireLoggedUser();
 
-            $roomsData = RoomRequestHandler::getUserRooms($_SESSION["id"]);
+            if (isset($_GET["roomId"])) {
+                $response = RoomRequestHandler::getRoom($_GET["roomId"]);
 
-            echo json_encode($roomsData);
+            } else {
+                $response = RoomRequestHandler::getUserRooms($_SESSION["id"]);
+            }
+
+            echo json_encode($response);
             break;
         }
         case "POST": { // create room

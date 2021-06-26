@@ -142,6 +142,30 @@
             self::createRoom($newRoomData, true);
         }
 
+        public static function getRoom($roomId) {
+            if (!$roomId) {
+                throw new BadRequestException("Room id should be provided");
+            }
+
+            $schedule = ScheduleRequestHandler::getSchedule($roomId);
+            
+            $connection = self::initConnection();
+
+            $stmt = $connection->prepare("SELECT * FROM rooms WHERE id=:roomId");
+            $stmt->execute([
+                "roomId" => $roomId
+            ]);
+
+            $row = $stmt->fetch();
+
+            $room = new Room($row["id"], $row["name"], $row["waitingInterval"], $row["meetInterval"], $row["start"], $row['activated']);
+
+            return [
+                "room" => $room, 
+                "schedule" => $schedule
+            ];
+        }
+
         private static function removeRoom($roomData) {
             $connection = self::initConnection();
 
