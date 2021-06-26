@@ -22,6 +22,14 @@ async function loadEvents (userType) {
                 }
             });
         })
+
+        document.querySelectorAll(".btn-edit").forEach(function(element) {
+            element.addEventListener("click", function(event) {
+                event.stopPropagation();
+                window.location.href = "add_room.html?roomId=" + 
+                    element.parentNode.parentNode.parentNode.getAttribute("id") + "&edit";
+            });
+        });
     } else {
         var message = userType == 1 ? 
             '<p>Няма събития, за които да сте поканени.</p>' :
@@ -95,6 +103,9 @@ function getTeacherEvent(event, start) {
                     '<span class="heading-label">Време за чакане: </span>' +
                     '<span  class="lighter">' + event['waitingInterval'] + ' мин.</span>' +
                 '</h3>' +
+                '<div class="centered">' +
+                    '<button class="btn-edit gradient-btn">Редактирай</button>' +
+                '</div>' +
             '</article>' +
         '</div>';
 

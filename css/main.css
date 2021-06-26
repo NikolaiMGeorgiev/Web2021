@@ -138,7 +138,6 @@ button {
     padding: 5px 10px;
     background: rgb(0,53,102);
     background: linear-gradient(45deg, rgba(0,53,102,1) 20%, rgba(65,134,198,1) 50%, rgba(0,53,102,1) 80%);
-
 }
 
 .gradient-btn:hover {

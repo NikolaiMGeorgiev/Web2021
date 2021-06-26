@@ -136,7 +136,7 @@
             if (!$newRoomData) {
                 throw new BadRequestException("Room data should be edited");
             }
-
+            
             self::removeRoom($newRoomData);
 
             self::createRoom($newRoomData, true);

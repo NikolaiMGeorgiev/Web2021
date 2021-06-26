@@ -6,6 +6,7 @@ function init() {
             '<button type="button" class="add-btn">+</button>' + 
             '<button type="button" class="remove-btn">-</button>'
         '</div>';
+    var isEditing = (window.location.href.indexOf("edit") != -1);
     document.getElementById("schedule").innerHTML = userRow;
 
     buttonsInit(document.querySelector(".add-btn"), document.querySelector(".remove-btn"));
@@ -28,7 +29,7 @@ function init() {
     document.getElementById("schedule_from").addEventListener("submit", function (event) {
     event.preventDefault();
         if (validateFormInput() && validateUsersInput()) {
-            postForm();
+            postForm(isEditing);
             event.preventDefault();
         } else {
             event.preventDefault();
@@ -37,15 +38,19 @@ function init() {
     document.getElementById("cancel_btn").addEventListener("click", function () {
         window.location.href = "panel.html";
     });
+    
+    if (isEditing) {
+        fillRoomData();
+    }
 }
 
-async function postForm() {
+async function postForm(isEditing = 0) {
     const response = await fetch("endpoints/room.php", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: getFormData(),
+        body: getFormData(isEditing),
     }).then(data => data.json());
 
     if (response.success) {
@@ -55,7 +60,31 @@ async function postForm() {
     }
 }
 
-function getFormData () {
+async function fillRoomData() {
+    const roomId = window.location.href.split("?")[1].split("&")[0];
+    const userData = await fetch('endpoints/room.php' + "?" + roomId, {
+        method: 'GET'
+    }).then(data => data.json());
+
+    fillSchedule(userData.schedule);
+
+    var timeDB = userData.room["start"].split(" ")[1].split(":");
+    var time = timeDB[0] + ":" + timeDB[1];
+
+    document.getElementById("name").value = userData.room["name"];
+    document.getElementById("waitingInterval").value = userData.room["waitingInterval"];
+    document.getElementById("meetInterval").value = userData.room["meetInterval"];
+    document.getElementById("date").value = userData.room["start"].split(" ")[0];
+    document.getElementById("time").value = time;
+
+    document.querySelectorAll(".user-row").forEach(element => {
+        buttonsInit(element.childNodes[2], element.childNodes[3]);
+    });
+    
+    changeTime(document.getElementById("time").value);
+}
+
+function getFormData (isEditing = 0) {
     var schedule = [];
     document.querySelectorAll(".user-row").forEach(element => {
         schedule.push(element.childNodes[0].value);
@@ -68,8 +97,28 @@ function getFormData () {
         "start": document.getElementById("date").value + " " + document.getElementById("time").value,
         "schedule": schedule
     };
+    if (isEditing) {
+        const roomId = window.location.href.split("?")[1].split("&")[0].replace("roomId=", "");
+        data["id"] = roomId;
+        data["edit"] = true;
+    }
 
     return JSON.stringify(data);
+}
+
+function fillSchedule(data) {
+    var scheduleHTML = '';
+    for (var single of data) {
+        scheduleHTML += 
+        '<div class="user-row">' +
+            '<input type="text" name="email" class="email" value="' + single["email"] + '">' + 
+            '<input type="text" name="userTime" class="userTime" disabled>' + 
+            '<button type="button" class="add-btn">+</button>' + 
+            '<button type="button" class="remove-btn">-</button>' +
+        '</div>';
+        
+    }
+    document.getElementById("schedule").innerHTML = scheduleHTML;
 }
 
 function validateFormInput () {
