@@ -6,24 +6,39 @@
 
     class RoomRequestHandler {
 
-        public static function createRoom($roomData) {
+        public static function createRoom($roomData, $edit = false) {
             if (!$roomData) {
                 throw new BadRequestException("Room data should be provided");
             }
 
             $connection = self::initConnection();
 
-            $stmt = $connection->prepare("INSERT INTO rooms (name, waitingInterval, meetInterval,
-                userId, start) VALUES (:name, :waitingInterval, :meetInterval, :userId, :start)");
-            $stmt->execute([
-                "name" => $roomData["name"],
-                "waitingInterval" => $roomData["waitingInterval"],
-                "meetInterval" => $roomData["meetInterval"],
-                "userId" => $_SESSION["id"],
-                "start" => $roomData["start"]
-            ]);
+            if ($edit) {
+                $stmt = $connection->prepare("INSERT INTO rooms (id, name, waitingInterval, meetInterval,
+                                              userId, start) VALUES (:id, :name, :waitingInterval, :meetInterval, :userId, :start)");
+                $stmt->execute([
+                    "id" => $roomData["id"],
+                    "name" => $roomData["name"],
+                    "waitingInterval" => $roomData["waitingInterval"],
+                    "meetInterval" => $roomData["meetInterval"],
+                    "userId" => $_SESSION["id"],
+                    "start" => $roomData["start"]
+                ]);
 
-            $roomId = $connection->lastInsertId();
+                $roomId = $roomData["id"];
+            } else {
+                $stmt = $connection->prepare("INSERT INTO rooms (name, waitingInterval, meetInterval,
+                                              userId, start) VALUES (:name, :waitingInterval, :meetInterval, :userId, :start)");
+                $stmt->execute([
+                    "name" => $roomData["name"],
+                    "waitingInterval" => $roomData["waitingInterval"],
+                    "meetInterval" => $roomData["meetInterval"],
+                    "userId" => $_SESSION["id"],
+                    "start" => $roomData["start"]
+                ]);
+
+                $roomId = $connection->lastInsertId();
+            }
             
             $emails = $roomData["schedule"];
 
@@ -115,6 +130,35 @@
             }
             
             return $response;
+        }
+
+        public static function editRoom($newRoomData) {
+            if (!$newRoomData) {
+                throw new BadRequestException("Room data should be edited");
+            }
+
+            self::removeRoom($newRoomData);
+
+            self::createRoom($newRoomData, true);
+        }
+
+        private static function removeRoom($roomData) {
+            $connection = self::initConnection();
+
+            $stmt = $connection->prepare("DELETE FROM schedule WHERE roomId=:roomId");
+            $stmt->execute([
+                "roomId" => $roomData["id"]
+            ]);
+
+            $stmt = $connection->prepare("DELETE FROM queues WHERE roomId=:roomId");
+            $stmt->execute([
+                "roomId" => $roomData["id"]
+            ]);
+
+            $stmt = $connection->prepare("DELETE FROM rooms WHERE id=:roomId");
+            $stmt->execute([
+                "roomId" => $roomData["id"]
+            ]);
         }
 
         private static function initConnection() {

@@ -18,7 +18,11 @@
 
             $newRoomData = json_decode(file_get_contents("php://input"), true);
 
-            $roomId = RoomRequestHandler::createRoom($newRoomData);
+            if($newRoomData["edit"]) {
+                RoomRequestHandler::editRoom($newRoomData);
+            } else {
+                $roomId = RoomRequestHandler::createRoom($newRoomData);
+            }
             
             echo json_encode(["success" => true]);
             break;
