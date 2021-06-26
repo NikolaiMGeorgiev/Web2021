@@ -23,7 +23,7 @@
 
             $newRoomData = json_decode(file_get_contents("php://input"), true);
 
-            if($newRoomData["edit"]) {
+            if(array_key_exists("edit",$newRoomData)) {
                 RoomRequestHandler::editRoom($newRoomData);
             } else {
                 $roomId = RoomRequestHandler::createRoom($newRoomData);
