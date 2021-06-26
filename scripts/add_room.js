@@ -10,19 +10,24 @@ function init() {
     document.getElementById("schedule").innerHTML = userRow;
 
     buttonsInit(document.querySelector(".add-btn"), document.querySelector(".remove-btn"));
-    document.getElementById("time").addEventListener("input", function () {
+    document.getElementById("hours").addEventListener("input", function () {
         if (validateScheduleInput()) {
-            changeTime(document.getElementById("time").value);
+            changeTime(document.getElementById("hours").value, document.getElementById("minutes").value);
+        }
+    });
+    document.getElementById("minutes").addEventListener("input", function () {
+        if (validateScheduleInput()) {
+            changeTime(document.getElementById("hours").value, document.getElementById("minutes").value);
         }
     });
     document.getElementById("meetInterval").addEventListener("input", function () {
         if (validateScheduleInput()) {
-            changeTime(document.getElementById("time").value);
+            changeTime(document.getElementById("hours").value, document.getElementById("minutes").value);
         }
     });
     document.getElementById("waitingInterval").addEventListener("input", function () {
         if (validateScheduleInput()) {
-            changeTime(document.getElementById("time").value);
+            changeTime(document.getElementById("hours").value, document.getElementById("minutes").value);
         }
     });
 
@@ -69,19 +74,19 @@ async function fillRoomData() {
     fillSchedule(userData.schedule);
 
     var timeDB = userData.room["start"].split(" ")[1].split(":");
-    var time = timeDB[0] + ":" + timeDB[1];
 
     document.getElementById("name").value = userData.room["name"];
     document.getElementById("waitingInterval").value = userData.room["waitingInterval"];
     document.getElementById("meetInterval").value = userData.room["meetInterval"];
     document.getElementById("date").value = userData.room["start"].split(" ")[0];
-    document.getElementById("time").value = time;
+    document.getElementById("hours").value = timeDB[0];
+    document.getElementById("minutes").value = timeDB[1];
 
     document.querySelectorAll(".user-row").forEach(element => {
         buttonsInit(element.childNodes[2], element.childNodes[3]);
     });
     
-    changeTime(document.getElementById("time").value);
+    changeTime(document.getElementById("hours").value, document.getElementById("minutes").value);
 }
 
 function getFormData (isEditing = 0) {
@@ -94,7 +99,8 @@ function getFormData (isEditing = 0) {
         "name": document.getElementById("name").value,
         "waitingInterval": document.getElementById("waitingInterval").value,
         "meetInterval": document.getElementById("meetInterval").value,
-        "start": document.getElementById("date").value + " " + document.getElementById("time").value,
+        "start": document.getElementById("date").value + " " + document.getElementById("hours").value + 
+            ":" + document.getElementById("minutes").value,
         "schedule": schedule
     };
     if (isEditing) {
@@ -127,7 +133,8 @@ function validateFormInput () {
 
     renderError(name);
     renderError(date);
-    renderError(document.getElementById("time"));
+    renderError(document.getElementById("hours"));
+    renderError(document.getElementById("minutes"));
     renderError(document.getElementById("meetInterval"));
     renderError(document.getElementById("waitingInterval"));
 
@@ -135,11 +142,12 @@ function validateFormInput () {
 }
 
 function validateScheduleInput () {
-    let time = document.getElementById("time");
+    let hours = document.getElementById("hours");
+    let minutes = document.getElementById("minutes");
     let meetInterval = document.getElementById("meetInterval");
     let waitingInterval = document.getElementById("waitingInterval");
 
-    return validateInput(time) && validateInput(meetInterval) && validateInput(waitingInterval);
+    return validateInput(hours) && validateInput(minutes) && validateInput(meetInterval) && validateInput(waitingInterval);
 }
 
 function validateInput(element) {
@@ -164,13 +172,12 @@ function validateUsersInput () {
     return isValid;
 }
 
-function changeTime (timeString) {
-    var time = timeString.split(":");
+function changeTime (hours, minutes) {
     var startTime = new Date();
     var meetTime = parseInt(document.getElementById("meetInterval").value);
     var waitTime = parseInt(document.getElementById("waitingInterval").value);
-    startTime.setHours(time[0]);
-    startTime.setMinutes(time[1]);
+    startTime.setHours(hours);
+    startTime.setMinutes(minutes);
 
     document.querySelectorAll(".userTime").forEach(element => {
         let minutes = (startTime.getMinutes() < 10 ? "0" : "") + startTime.getMinutes();
@@ -197,7 +204,7 @@ function buttonsInit (addButton, removeButton) {
         }
 
         if (validateScheduleInput()) {
-            changeTime(document.getElementById("time").value);
+            changeTime(document.getElementById("hours").value, document.getElementById("minutes").value);
         }
     });
 
@@ -210,7 +217,7 @@ function buttonsInit (addButton, removeButton) {
         buttonsInit(rowNode.childNodes[2], rowNode.childNodes[3]);
 
         if (validateScheduleInput()) {
-            changeTime(document.getElementById("time").value);
+            changeTime(document.getElementById("hours").value, document.getElementById("minutes").value);
         }
     });
 }

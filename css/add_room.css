@@ -86,6 +86,10 @@ fieldset {
     margin-bottom: 10px;
 }
 
+.time {
+    width: 32px;
+}
+
 #schedule {
     width: 100%;
     margin-bottom: 20px;
